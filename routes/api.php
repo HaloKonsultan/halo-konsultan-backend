@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/register', 'UserController@register');
-Route::post('/login', 'UserController@login');
+Route::post('/user/register', 'UserController@register');
+Route::post('/user/login', 'UserController@login');
 
 
 Route::prefix('user', ['middleware' => 'api'])->group(function () {
@@ -29,6 +29,8 @@ Route::prefix('user', ['middleware' => 'api'])->group(function () {
 
 Route::post('/consultant/register', 'ConsultantController@register');
 Route::post('/consultant/login', 'ConsultantController@login');
-Route::post('/consultant/logout', 'ConsultantController@logout');
-Route::get('/consultant/show', 'ConsultantController@show');
 
+Route::prefix('consultant', ['middleware' => 'consultants-api'])->group(function () {
+    Route::post('/logout', 'ConsultantController@logout');
+    Route::get('/show', 'ConsultantController@show');
+});

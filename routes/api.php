@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('/register', 'UserController@register');
+Route::post('/login', 'UserController@login');
+
+
+Route::prefix('user', ['middleware' => 'api'])->group(function () {
+    Route::get('/show', 'UserController@show');
+    Route::post('/logout', 'UserController@logout');
 });
+
+Route::post('/consultant/register', 'ConsultantController@register');
+Route::post('/consultant/login', 'ConsultantController@login');
+Route::post('/consultant/logout', 'ConsultantController@logout');
+Route::get('/consultant/show', 'ConsultantController@show');
+

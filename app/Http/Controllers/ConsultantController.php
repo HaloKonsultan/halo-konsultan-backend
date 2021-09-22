@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Consultant;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ConsultantController extends Controller
 {

@@ -51,30 +51,6 @@ class UserController extends Controller
         }
     }
 
-    // public function login()
-    // {
-    //     $email = $request->input('email');
-    //     $password = $request->input('password');
-
-    //     $data = User::where('email', $email)->first();
-
-    //     if(Hash::check($password, $data->password))
-    //     {
-    //         return response()->json([
-    //             'status' => 'success',
-    //             'message' => 'login successfully',
-    //             'data' => $data
-    //         ],201);
-    //     }else
-    //     {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'login failed',
-    //             'data' => ''
-    //         ]);
-    //     }     
-    // }
-
     public function login() 
     {
         $credentials = request(['email', 'password']);

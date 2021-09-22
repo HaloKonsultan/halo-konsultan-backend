@@ -19,6 +19,7 @@ class CreateConsultantsTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('category')->nullable();
+            $table->string('description')->nullable();
             $table->string('gender')->nullable();
             $table->string('location')->nullable();
             $table->bigInteger('consultation_price')->nullable();

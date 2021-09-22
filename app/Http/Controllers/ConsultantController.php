@@ -12,7 +12,7 @@ class ConsultantController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:consultants-api', ['except' => ['login']]);
+        $this->middleware('auth:consultants-api', ['except' => ['login', 'register']]);
     }
     //
     public function show() {

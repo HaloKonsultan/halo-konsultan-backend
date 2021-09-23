@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
     //
     public function show() {
         $data =  User::all();
@@ -51,37 +47,27 @@ class UserController extends Controller
         }
     }
 
-    public function login() 
+    public function login(Request $request) 
     {
-        $credentials = request(['email', 'password']);
+        $email = $request->input('email');
+        $password = $request->input('password');
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $data = User::where('email', $email)->first();
+
+        if(Hash::check($password, $data->password))
+        {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'login successfully',
+                'data' => $data
+            ],201);
+        }else
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'login failed',
+                'data' => ''
+            ]);
         }
-
-        return $this->respondWithToken($token);
-    }
-
-    public function logout()
-    {
-        auth()->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
     }
 }

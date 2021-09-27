@@ -20,6 +20,7 @@ class CreateConsultationsTable extends Migration
             $table->string('description')->nullable();
             $table->string('title')->nullable();
             $table->bigInteger('consultation_price')->nullable();
+            $table->string('location')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_confirmed')->nullable();
             $table->string('preference')->nullable();

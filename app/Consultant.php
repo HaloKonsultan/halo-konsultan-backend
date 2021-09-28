@@ -11,12 +11,37 @@ class Consultant extends Authenticatable implements JWTSubject
     use Notifiable;
     //
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'photo', 'gender', 'location', 'likes_total',
+        'description', 'chat_price', 'consultation_price', 'firebase_id'
     ];
 
     protected $hidden = [
         'password'
     ];
+
+    public function category() {
+        return $this->belongsTo('App\Categories');
+    }
+
+    public function educations() {
+        return $this->hasMany('App\ConsultantEducation');
+    }
+
+    public function skills() {
+        return $this->hasMany('App\ConsultantSkill');
+    }
+
+    public function experience() {
+        return $this->hasMany('App\ConsultantExperience');
+    }
+
+    public function virtualAccount() {
+        return $this->hasMany('App\ConsultantVirtualAccount');
+    }
+
+    public function documentation() {
+        return $this->hasMany('App\ConsultantDocumentation');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

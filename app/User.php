@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'location', 'photo', 'firebase_id'
     ];
 
     /**
@@ -28,6 +28,10 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password'
     ];
+
+    public function bankDocument() {
+        return $this->hasMany('App\UserBankDocument');
+    }
 
     /**
      * The attributes that should be cast to native types.

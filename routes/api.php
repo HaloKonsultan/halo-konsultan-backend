@@ -21,12 +21,14 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('user')->group(function () {
     Route::post('/register', 'UserController@register');
     Route::post('/login', 'UserController@login');
-    Route::get('/show', 'UserController@show');
+    Route::get('/profile/{id}', 'UserController@profile');
+    Route::get('/consultation/{id}', 'ConsultantController@consultation');
 });
 
 
 Route::prefix('consultant')->group(function () {
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
-    Route::get('/show', 'ConsultantController@show');
+    Route::get('/profile/{id}', 'ConsultantController@profile');
+    Route::get('/consultation/{id}', 'ConsultantController@consultation');
 });

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Consultation;
+use App\Http\Resources\ConsultationResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -69,5 +72,19 @@ class UserController extends Controller
                 'data' => ''
             ]);
         }
+    }
+
+    public function profile($id) {
+        $data =  User::findOrFail($id);
+        return response()->json([
+            'data' => new UserResource($data)
+        ]);
+    }
+
+    public function consultation($id) {
+        $data =  Consultation::findOrFail($id);
+        return response()->json([
+            'data' => new ConsultationResource($data)
+        ]);
     }
 }

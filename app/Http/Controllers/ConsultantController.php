@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Consultant;
+use App\Consultation;
+use App\Http\Resources\ConsultantResource;
+use App\Http\Resources\ConsultationResource;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -74,5 +77,19 @@ class ConsultantController extends Controller
                 'message' => 'Login failed'
             ]);
         }
+    }
+
+    public function profile($id) {
+        $data =  Consultant::findOrFail($id);
+        return response()->json([
+            'data' => new ConsultantResource($data)
+        ]);
+    }
+
+    public function consultation($id) {
+        $data =  Consultation::findOrFail($id);
+        return response()->json([
+            'data' => new ConsultationResource($data)
+        ]);
     }
 }

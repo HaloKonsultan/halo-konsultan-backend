@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Consultation extends Model
+class Consultation extends Pivot
 {
     //
     protected $table = 'consultations';
@@ -23,14 +23,14 @@ class Consultation extends Model
     }
 
     public function transaction() {
-        return $this->hasMany('App\Transaction');
+        return $this->hasOne('App\Transaction', 'consultation_id');
     }
 
     public function preferenceDate() {
-        return $this->hasMany('App\ConsultationPreferenceDate');
+        return $this->hasMany('App\ConsultationPreferenceDate', 'consultation_id');
     }
 
     public function document() {
-        return $this->hasMany('App\ConsultationDocument');
+        return $this->hasMany('App\ConsultationDocument', 'consultation_id');
     }
 }

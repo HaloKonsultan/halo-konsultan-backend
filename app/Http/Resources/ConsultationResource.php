@@ -26,9 +26,9 @@ class ConsultationResource extends JsonResource
             'date' => $this->date,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
-            'transaction' => TransactionResource::collection($this->transaction),
-            'consultation_preference_date' => ConsultationPreferenceDateResource::collection($this->preferenceDate),
-            'consultation_document' => ConsultationDocumentResource::collection($this->document)
+            'transaction' => new TransactionResource($this->transaction),
+            'consultation_document' => ConsultationDocumentResource::collection($this->document),
+            'consultation_preference_date' => ConsultationPreferenceDateResource::collection($this->preferenceDate)
         ];
     }
 }

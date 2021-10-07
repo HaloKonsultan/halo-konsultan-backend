@@ -14,6 +14,6 @@ class ParentCategories extends Model
     ];
 
     public function category() {
-        return $this->hasMany('App\Categories');
+        return $this->hasMany('App\Categories', 'parent_id', 'id');
     }
 }

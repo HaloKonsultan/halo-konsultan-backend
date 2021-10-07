@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Consultant;
 use App\Consultation;
+use App\Helpers\CollectionHelper;
+use App\Http\Resources\ConsultantResource;
 use App\Http\Resources\ConsultationResource;
+use App\Http\Resources\UserConsultationResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +19,16 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     //
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login']]);
+    }
+
     public function show() {
         $data =  User::all();
         return response()->json([
@@ -38,7 +53,7 @@ class UserController extends Controller
             $data->save();
 
             return response()->json([
-                'status' => 'success',
+                'code ' => 201,
                 'message' => 'registered',
                 'data' => $data
             ],201);
@@ -52,39 +67,146 @@ class UserController extends Controller
 
     public function login(Request $request) 
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
-
-        $data = User::where('email', $email)->first();
-
-        if(Hash::check($password, $data->password))
-        {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'login successfully',
-                'data' => $data
-            ],201);
-        }else
-        {
-            return response()->json([
-                'success' => false,
-                'message' => 'login failed',
-                'data' => ''
+        try {
+            $request->validate([
+                'email' => ['required','email'],
+                'password' => ['required'],
             ]);
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $data = User::where('email', $email)->first();
+    
+            if(Hash::check($password, $data->password))
+            {
+                if(! $token = auth()->login($data)) {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                } else {
+                    return $this->respondWithToken($token, $data);
+                }
+            }
+        }catch(\Exception $e){
+            return response()->json([
+                'code' => 401,
+                'message' => 'Unauthorized'
+            ],401);
         }
     }
 
     public function profile($id) {
-        $data =  User::findOrFail($id);
-        return response()->json([
-            'data' => new UserResource($data)
-        ]);
+        try {
+            $data =  User::findOrFail($id);
+            return response()->json([
+                'code' => 200,
+                'data' => new UserResource($data)
+            ],200);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
+       
+    }
+
+    public function consultant($id) {
+        try {
+            $data = Consultant::findOrFail($id);
+            return response()->json([
+                'code' => 200,
+                'data' => new ConsultantResource($data)
+            ],200);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
     }
 
     public function consultation($id) {
-        $data =  Consultation::findOrFail($id);
+        try {
+            $data = Consultation::findOrFail($id);
+            return response()->json([
+                'code' => 200,
+                'data' => new UserConsultationResource($data)
+            ]);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
+    }
+
+    public function status($id, $status) {
+        try {
+            $data = DB::table('consultations')
+                        ->join('consultants', 'consultations.consultant_id', '=', 'consultants.id')
+                        ->select('consultations.id', 'consultations.consultant_id',  'consultants.name',  'consultations.title', 'consultations.status', 'consultations.is_confirmed', 'consultations.date')
+                        ->where('consultations.user_id', '=', $id)
+                        ->where('consultations.status', '=', $status)
+                        ->get();
+            $paginated = CollectionHelper::paginate($data,10);
+            return response()->json([
+                'code' => 200,
+                'data' => $paginated
+            ],200);
+        }catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
+    }
+
+
+    public function searchConsultant($name) {
+        try {
+            $data = DB::table('consultants')
+                    ->leftJoin('categories', 'consultants.category_id', '=', 'categories.id')
+                    ->select('consultants.id', 'consultants.name', 'categories.name AS position', 'consultants.likes_total', 'consultants.location', 'consultants.photo')
+                    ->where('consultants.name', 'LIKE', '%'.$name.'%')
+                    ->get();
+            $paginated = CollectionHelper::paginate($data,2);
+            return response()->json([
+                'code' => 200,
+                'data' => $paginated
+            ],200);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
+    }
+
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token,$data)
+    {
         return response()->json([
-            'data' => new ConsultationResource($data)
-        ]);
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'data' => $data
+        ],200);
     }
 }

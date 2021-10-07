@@ -18,17 +18,40 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::prefix('user')->group(function () {
+Route::prefix('user', ['middleware' => 'api'])->group(function () {
     Route::post('/register', 'UserController@register');
     Route::post('/login', 'UserController@login');
     Route::get('/profile/{id}', 'UserController@profile');
-    Route::get('/consultation/{id}', 'ConsultantController@consultation');
+    Route::prefix('consultant')->group(function () {
+        Route::get('/{id}', 'UserController@consultant');
+        Route::get('/search/{name}', 'UserController@searchConsultant');
+        Route::get('/category/{id}', 'CategoriesController@consultant');
+    });
+    Route::prefix('consultation')->group(function () {
+        Route::get('/{id}', 'UserController@consultation');
+        Route::get('/show/{id}', 'ConsultationController@consultation');
+        Route::get('/user/{id}/status/{status}', 'UserController@status');
+    });
+    Route::prefix('category')->group(function () {
+        Route::get('/all', 'CategoriesController@all');
+        Route::get('/random', 'CategoriesController@random');
+        Route::get('/consultants/{city}', 'ConsultantController@city');
+    });
+    
 });
 
 
-Route::prefix('consultant')->group(function () {
+Route::prefix('consultant', ['middleware' => 'consultants-api'])->group(function () {
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
     Route::get('/profile/{id}', 'ConsultantController@profile');
-    Route::get('/consultation/{id}', 'ConsultantController@consultation');
+    Route::get('/show', 'ConsultantController@show');
+    Route::get('/history','ConsultationController@history');
+    Route::prefix('consultations')->group(function () {
+        Route::get('/{id}', 'ConsultationController@consultation');
+        Route::get('/show/{id}', 'ConsultationController@consultation');
+        Route::get('/user/{no}/status/{status}', 'ConsultationController@consultant');
+        Route::get('/user/{no}/active', 'ConsultantController@active');
+    });
 });
+

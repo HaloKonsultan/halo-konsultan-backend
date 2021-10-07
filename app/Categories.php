@@ -18,6 +18,6 @@ class Categories extends Model
     }
 
     public function parent() {
-        return $this->belongsTo('App\ParentCategories');
+        return $this->belongsTo('App\ParentCategories', 'parent_id');
     }
 }

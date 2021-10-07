@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\ConsultationDocument;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ConsultationResource extends JsonResource
+class ConsultantConsultationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

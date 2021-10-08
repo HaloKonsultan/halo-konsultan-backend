@@ -103,7 +103,7 @@ class ConsultantController extends Controller
                     ->join('users', 'consultations.user_id', '=', 'users.id')
                     ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date', 'consultations.status')
                     ->get();
-            $paginated = CollectionHelper::paginate($data,1);
+            $paginated = CollectionHelper::paginate($data,10);
             return response()->json([
                 'code' => 200,
                 'data' => $paginated
@@ -176,7 +176,7 @@ class ConsultantController extends Controller
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'active')
                     ->get();
-            $paginated = CollectionHelper::paginate($data,10);
+            $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
                 'data' => $paginated
@@ -197,7 +197,7 @@ class ConsultantController extends Controller
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
                     ->get();
-            $paginated = CollectionHelper::paginate($data,10);
+            $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
                 'data' => $paginated
@@ -212,13 +212,13 @@ class ConsultantController extends Controller
 
     public function today($id) {
         try {
-             $data = DB::table('consultations')
+            $data = DB::table('consultations')
                     ->join('users', 'consultations.user_id', '=', 'users.id')
                     ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'today')
                     ->get();
-            $paginated = CollectionHelper::paginate($data,10);
+            $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
                 'data' => $paginated
@@ -239,7 +239,7 @@ class ConsultantController extends Controller
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'incoming')
                     ->get();
-            $paginated = CollectionHelper::paginate($data,10);
+            $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
                 'data' => $paginated

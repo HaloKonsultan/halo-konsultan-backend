@@ -10,7 +10,7 @@ class ConsultationPreferenceDate extends Model
     protected $table = 'consultation_preference_date';
 
     protected $fillable = [
-        'date'
+        'consultation_id', 'date'
     ];
 
     public function consultation() {

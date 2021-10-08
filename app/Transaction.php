@@ -10,7 +10,7 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
-        'status'
+        'consultation_id', 'status'
     ];
 
     public function consultation() {

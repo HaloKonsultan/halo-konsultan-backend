@@ -1,5 +1,6 @@
 <?php
 
+use App\ConsultantEducation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,6 +12,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        $this->call([
+            ParentCategoriesSeeder::class,
+            CategoriesSeeder::class,
+            ConsultantSeeder::class,
+            UserSeeder::class,
+            ConsultationsSeeder::class,
+            ConsultantDocumentationSeeder::class,
+            ConsultantEducationSeeder::class,
+            ConsultantExperienceSeeder::class,
+            ConsultantSkillSeeder::class,
+            ConsultantVirtualAccountSeeder::class,
+            ConsultantDocumentationSeeder::class,
+            ConsultationPreferenceDateSeeder::class,
+            TransactionSeeder::class,
+            UserBankDocumentSeeder::class
+        ]);
+
     }
 }

@@ -10,7 +10,7 @@ class ConsultantExperience extends Model
     protected $table = 'consultant_experiences';
     
     protected $fillable = [
-        'position', 'start_year', 'end_year'
+        'consultant_id','position', 'start_year', 'end_year'
     ];
 
     public function consultant() {

@@ -10,7 +10,7 @@ class ConsultantDocumentation extends Model
     protected $table = 'consultant_documentations';
 
     protected $fillable = [
-        'photo'
+        'consultant_id','photo'
     ];
 
     public function consultant() {

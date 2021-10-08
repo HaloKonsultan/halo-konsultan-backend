@@ -10,7 +10,7 @@ class Categories extends Model
     protected $table = 'categories';
 
     protected $fillable = [
-        'name', 'logo'
+        'name', 'logo', 'parent_id'
     ];
 
     public function consultant() {

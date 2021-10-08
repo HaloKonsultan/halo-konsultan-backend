@@ -10,7 +10,7 @@ class ConsultationDocument extends Model
     protected $table = 'consultation_documents';
 
     protected $fillable = [
-        'name', 'description', 'file'
+        'consultation_id', 'name', 'description', 'file'
     ];
 
     public function consultaton() {

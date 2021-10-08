@@ -10,7 +10,7 @@ class ConsultantEducation extends Model
     protected $table = 'consultant_educations';
 
     protected $fillable = [
-        'institution_name', 'major', 'start_year', 'end_year'
+        'consultant_id', 'institution_name', 'major', 'start_year', 'end_year'
     ];
 
     public function consultant() {

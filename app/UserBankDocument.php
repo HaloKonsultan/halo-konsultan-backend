@@ -10,7 +10,7 @@ class UserBankDocument extends Model
     protected $table = 'user_bank_documents';
 
     protected $fillable = [
-        'filename', 'url'
+        'user_id', 'filename', 'url'
     ];
 
     public function user() {

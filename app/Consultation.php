@@ -10,8 +10,9 @@ class Consultation extends Pivot
     protected $table = 'consultations';
 
     protected $fillable = [
-        'description', 'title', 'consultation_price', 'location', 'status',
-        'is_confirmed', 'preference', 'date', 'conference_link'
+        'description','consultant_id', 'user_id', 'title', 'consultation_price',
+        'location', 'status','is_confirmed', 'preference', 'date', 
+        'conference_link'
     ];
 
     public function consultant() {

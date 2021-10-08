@@ -29,7 +29,7 @@ Route::prefix('user', ['middleware' => 'api'])->group(function () {
     });
     Route::prefix('consultation')->group(function () {
         Route::get('/{id}', 'UserController@consultation');
-        Route::get('/show/{id}', 'ConsultationController@consultation');
+        Route::get('/show/{id}', 'UserController@consultation');
         Route::get('/user/{id}/status/{status}', 'UserController@status');
     });
     Route::prefix('category')->group(function () {
@@ -46,12 +46,14 @@ Route::prefix('consultant', ['middleware' => 'consultants-api'])->group(function
     Route::post('/login', 'ConsultantController@login');
     Route::get('/profile/{id}', 'ConsultantController@profile');
     Route::get('/show', 'ConsultantController@show');
-    Route::get('/history','ConsultationController@history');
+    Route::get('/history','ConsultantController@history');
     Route::prefix('consultations')->group(function () {
-        Route::get('/{id}', 'ConsultationController@consultation');
-        Route::get('/show/{id}', 'ConsultationController@consultation');
-        Route::get('/user/{no}/status/{status}', 'ConsultationController@consultant');
+        Route::get('/{id}', 'ConsultantController@consultation');
+        Route::get('/user/{no}/status/{status}', 'ConsultantController@consultant');
         Route::get('/user/{no}/active', 'ConsultantController@active');
+        Route::get('/user/{no}/incoming', 'ConsultantController@active');
+        Route::get('/user/{no}/today', 'ConsultantController@active');
+        Route::get('/user/{no}/waiting', 'ConsultantController@active');
     });
 });
 

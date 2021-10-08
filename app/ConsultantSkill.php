@@ -10,7 +10,7 @@ class ConsultantSkill extends Model
     protected $table = 'consultant_skills';
 
     protected $fillable = [
-        'skills'
+        'consultant_id' ,'skills'
     ];
 
     public function consultant() {

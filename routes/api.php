@@ -29,13 +29,12 @@ Route::prefix('user', ['middleware' => 'api'])->group(function () {
     });
     Route::prefix('consultation')->group(function () {
         Route::get('/{id}', 'UserController@consultation');
-        Route::get('/show/{id}', 'UserController@consultation');
         Route::get('/user/{id}/status/{status}', 'UserController@status');
     });
-    Route::prefix('category')->group(function () {
+    Route::prefix('category', ['middleware' => 'api'])->group(function () {
         Route::get('/all', 'CategoriesController@all');
         Route::get('/random', 'CategoriesController@random');
-        Route::get('/consultants/{city}', 'ConsultantController@city');
+        Route::get('/consultants/{city}', 'CategoriesController@city');
     });
     
 });
@@ -46,14 +45,14 @@ Route::prefix('consultant', ['middleware' => 'consultants-api'])->group(function
     Route::post('/login', 'ConsultantController@login');
     Route::get('/profile/{id}', 'ConsultantController@profile');
     Route::get('/show', 'ConsultantController@show');
-    Route::get('/history','ConsultantController@history');
-    Route::prefix('consultations')->group(function () {
+    Route::get('/history/{id}','ConsultantController@history');
+    Route::prefix('consultation')->group(function () {
         Route::get('/{id}', 'ConsultantController@consultation');
-        Route::get('/user/{no}/status/{status}', 'ConsultantController@consultant');
-        Route::get('/user/{no}/active', 'ConsultantController@active');
-        Route::get('/user/{no}/incoming', 'ConsultantController@active');
-        Route::get('/user/{no}/today', 'ConsultantController@active');
-        Route::get('/user/{no}/waiting', 'ConsultantController@active');
+        Route::get('/user/{id}/status/{status}', 'ConsultantController@status');
+        Route::get('/user/{id}/active', 'ConsultantController@active');
+        Route::get('/user/{id}/incoming', 'ConsultantController@incoming');
+        Route::get('/user/{id}/today', 'ConsultantController@today');
+        Route::get('/user/{id}/waiting', 'ConsultantController@waiting');
     });
 });
 

@@ -141,8 +141,12 @@ class UserController extends Controller
     public function status($id, $status) {
         try {
             $data = DB::table('consultations')
-                        ->join('consultants', 'consultations.consultant_id', '=', 'consultants.id')
-                        ->select('consultations.id', 'consultations.consultant_id',  'consultants.name',  'consultations.title', 'consultations.status', 'consultations.is_confirmed', 'consultations.date')
+                        ->join('consultants', 'consultations.consultant_id', 
+                        '=', 'consultants.id')
+                        ->select('consultations.id', 
+                        'consultations.consultant_id', 'consultants.name', 
+                        'consultations.title', 'consultations.status',
+                        'consultations.is_confirmed', 'consultations.date')
                         ->where('consultations.user_id', '=', $id)
                         ->where('consultations.status', '=', $status)
                         ->get();
@@ -163,8 +167,11 @@ class UserController extends Controller
     public function searchConsultant($name) {
         try {
             $data = DB::table('consultants')
-                    ->leftJoin('categories', 'consultants.category_id', '=', 'categories.id')
-                    ->select('consultants.id', 'consultants.name', 'categories.name AS position', 'consultants.likes_total', 'consultants.location', 'consultants.photo')
+                    ->leftJoin('categories', 'consultants.category_id', '=', 
+                    'categories.id')
+                    ->select('consultants.id', 'consultants.name', 
+                    'categories.name AS position', 'consultants.likes_total',
+                    'consultants.location', 'consultants.photo')
                     ->where('consultants.name', 'LIKE', '%'.$name.'%')
                     ->get();
             $paginated = CollectionHelper::paginate($data,2);

@@ -3,7 +3,7 @@
 use App\ConsultationDocument;
 use Illuminate\Database\Seeder;
 
-class ConsultationDocumentationSeeder extends Seeder
+class ConsultationDocumentSeeder extends Seeder
 {
     /**
      * Run the database seeds.

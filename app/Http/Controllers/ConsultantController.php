@@ -97,11 +97,15 @@ class ConsultantController extends Controller
         }
     }
 
-    public function history() {
+    public function history($id) {
         try {
             $data = DB::table('consultations')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
                     ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date', 'consultations.status')
+                    ->select('consultations.id', 'consultations.title', 
+                    'users.name', 'consultations.date', 'consultations.status')
+                    ->where('consultations.consultant_id', '=', $id)
                     ->get();
             $paginated = CollectionHelper::paginate($data,10);
             return response()->json([
@@ -150,8 +154,10 @@ class ConsultantController extends Controller
     public function status($id, $status) {
         try {
             $data = DB::table('consultations')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
+                    ->select('consultations.id', 'consultations.title', 
+                    'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', $status)
                     ->get();
@@ -171,8 +177,10 @@ class ConsultantController extends Controller
     public function active($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
+                    ->select('consultations.id', 'consultations.title', 
+                    'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'active')
                     ->get();
@@ -192,8 +200,10 @@ class ConsultantController extends Controller
     public function waiting($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
+                    ->select('consultations.id', 'consultations.title', 
+                    'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
                     ->get();
@@ -213,8 +223,10 @@ class ConsultantController extends Controller
     public function today($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
+                    ->select('consultations.id', 'consultations.title', 
+                    'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'today')
                     ->get();
@@ -234,8 +246,10 @@ class ConsultantController extends Controller
     public function incoming($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 'users.name', 'consultations.date')
+                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    'consultants.id')
+                    ->select('consultations.id', 'consultations.title', 
+                    'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'incoming')
                     ->get();

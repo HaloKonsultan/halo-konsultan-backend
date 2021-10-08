@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\DB;
 class CategoriesController extends Controller
 {
     //
+     /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function all()
     {
         try {
@@ -55,7 +65,7 @@ class CategoriesController extends Controller
                 ->select('consultants.id', 'consultants.name', 
                 'categories.name AS position','consultants.likes_total',
                 'consultants.location', 'consultants.photo')
-                ->where('consultants.name', 'LIKE', '%' . $city . '%')
+                ->where('consultants.location', 'LIKE', '%' . $city . '%')
                 ->get();
             $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([

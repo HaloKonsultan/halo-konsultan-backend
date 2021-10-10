@@ -13,6 +13,6 @@ class ConsultationsSeeder extends Seeder
     public function run()
     {
         //
-        factory(Consultation::class,8)->create();
+        factory(Consultation::class,10)->create();
     }
 }

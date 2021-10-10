@@ -2,16 +2,16 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class Consultation extends Pivot
+class Consultation extends Model
 {
     //
     protected $table = 'consultations';
 
     protected $fillable = [
         'description','consultant_id', 'user_id', 'title', 'consultation_price',
-        'location', 'status','is_confirmed', 'preference', 'date', 
+        'location', 'status','is_confirmed', 'preference', 'date', 'time',
         'conference_link'
     ];
 

@@ -25,6 +25,7 @@ class CreateConsultationsTable extends Migration
             $table->boolean('is_confirmed')->nullable();
             $table->string('preference')->nullable();
             $table->string('date')->nullable();
+            $table->string('time')->nullable();
             $table->string('conference_link')->nullable();
             $table->timestamps();
         });

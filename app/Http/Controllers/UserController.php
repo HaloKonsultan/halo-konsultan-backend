@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Consultant;
 use App\Consultation;
+use App\ConsultationDocument;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantResource;
 use App\Http\Resources\ConsultationResource;
@@ -11,7 +12,7 @@ use App\Http\Resources\UserConsultationResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\User;
-use Exception;
+use Exception; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -26,14 +27,11 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
-    public function show() {
-        $data =  User::all();
-        return response()->json([
-            'data' => $data
-        ]);
+        $this->middleware('auth:api', ['except' => [
+            'login', 
+            'register', 
+            'logout'
+        ]]);
     }
 
     public function register(Request $request)
@@ -105,7 +103,6 @@ class UserController extends Controller
                 'message' => 'Not Found'
             ],404);
         }
-       
     }
 
     public function consultant($id) {
@@ -122,47 +119,6 @@ class UserController extends Controller
             ],404);
         }
     }
-
-    public function consultation($id) {
-        try {
-            $data = Consultation::findOrFail($id);
-            return response()->json([
-                'code' => 200,
-                'data' => new UserConsultationResource($data)
-            ]);
-        } catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function status($id, $status) {
-        try {
-            $data = DB::table('consultations')
-                        ->join('consultants', 'consultations.consultant_id', 
-                        '=', 'consultants.id')
-                        ->select('consultations.id', 
-                        'consultations.consultant_id', 'consultants.name', 
-                        'consultations.title', 'consultations.status',
-                        'consultations.is_confirmed', 'consultations.date')
-                        ->where('consultations.user_id', '=', $id)
-                        ->where('consultations.status', '=', $status)
-                        ->get();
-            $paginated = CollectionHelper::paginate($data,10);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
 
     public function searchConsultant($name) {
         try {
@@ -187,7 +143,6 @@ class UserController extends Controller
         }
     }
 
-
     /**
      * Log the user out (Invalidate the token).
      *
@@ -195,7 +150,7 @@ class UserController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }

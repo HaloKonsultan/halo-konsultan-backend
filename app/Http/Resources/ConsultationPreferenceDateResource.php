@@ -16,7 +16,8 @@ class ConsultationPreferenceDateResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date
+            'date' => $this->date,
+            'time' => $this->time
         ];
     }
 }

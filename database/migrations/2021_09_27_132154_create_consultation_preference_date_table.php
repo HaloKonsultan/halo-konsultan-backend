@@ -17,6 +17,7 @@ class CreateConsultationPreferenceDateTable extends Migration
             $table->id();
             $table->foreignId('consultation_id')->constrained('consultations')->onUpdate('cascade')->onDelete('cascade');
             $table->string('date')->nullable();
+            $table->string('time')->nullable();
             $table->timestamps();
         });
     }

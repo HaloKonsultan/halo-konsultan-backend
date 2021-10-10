@@ -23,12 +23,13 @@ class UserConsultationResource extends JsonResource
             'status' => $this->status,
             'is_confirmed' => $this->is_confirmed,
             'date' => $this->date,
+            'time' => $this->time,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
             'consultant' => [
-                'name' => $this->consultant->name,
-                'position' => $this->consultant->category->name,
-                'photo' => $this->consultant->photo
+                'name' => $this->consultant->name ?? '',
+                'position' => $this->consultant->category->name ?? '',
+                'photo' => $this->consultant->photo ?? ''
             ],
             'transaction' => new TransactionResource($this->transaction),
             'consultation_document' => ConsultationDocumentResource::collection($this->document),

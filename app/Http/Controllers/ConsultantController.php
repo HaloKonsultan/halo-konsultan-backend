@@ -8,6 +8,7 @@ use App\Consultation;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
 use App\Http\Resources\ConsultantResource;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,11 @@ class ConsultantController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:consultants-api', ['except' => ['login']]);
+        $this->middleware('auth:consultants-api', ['except' => [
+            'login', 
+            'register', 
+            'logout'
+        ]]);
     }
 
     public function register(Request $request)
@@ -97,175 +102,6 @@ class ConsultantController extends Controller
         }
     }
 
-    public function history($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'users.name', 'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,10);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function showAllConsultation() {
-        try {
-            $data = Consultation::all();
-            $paginated = CollectionHelper::paginate($data,10);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function consultation($id) {
-        try {
-            $data =  Consultation::findOrFail($id);
-            return response()->json([
-                'code' => 200,
-                'data' => new ConsultantConsultationResource($data)
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function status($id, $status) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', $status)
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,10);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function active($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', 'active')
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,5);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function waiting($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', 'waiting')
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,5);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function today($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', 'today')
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,5);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
-    public function incoming($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
-                    'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
-                    'consultations.date', 'consultations.status')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', 'incoming')
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,5);
-            return response()->json([
-                'code' => 200,
-                'data' => $paginated
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
-        }
-    }
-
     /**
      * Log the user out (Invalidate the token).
      *
@@ -273,7 +109,7 @@ class ConsultantController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('consultants-api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }

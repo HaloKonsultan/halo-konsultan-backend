@@ -43,7 +43,7 @@ class CategoriesController extends Controller
     public function random()
     {
         try {
-            $data = Categories::inRandomOrder()->get();
+            $data = Categories::inRandomOrder()->limit(5)->get();
             return response()->json([
                 'code' => 200,
                 'data' => $data

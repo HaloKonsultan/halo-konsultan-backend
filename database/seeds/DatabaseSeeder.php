@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             ConsultantExperienceSeeder::class,
             ConsultantSkillSeeder::class,
             ConsultantVirtualAccountSeeder::class,
-            ConsultantDocumentationSeeder::class,
+            ConsultationDocumentSeeder::class,
             ConsultationPreferenceDateSeeder::class,
             TransactionSeeder::class,
             UserBankDocumentSeeder::class

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Consultation;
+use App\ConsultationDocument;
+use App\ConsultationPreferenceDate;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
 use App\Http\Resources\UserConsultationResource;
@@ -28,7 +30,7 @@ class ConsultationController extends Controller
             'getIncomingConsultation',
             'getActiveConsultation',
             'getWaitingConsultation',
-            'getTodayConsultation',
+            // 'getTodayConsultation',
             'getCompletedConsultation',
             'getRejectedConsultation',
             'getConsultationStatus',
@@ -63,7 +65,7 @@ class ConsultationController extends Controller
     public function userConsultation($id) {
         try {
             $data = Consultation::findOrFail($id);
-            if($data->user_id == $this->auth()->id) {
+            if( auth('api')->user()->id == $data->user_id) {
                 return response()->json([
                     'code' => 200,
                     'data' => new UserConsultationResource($data)
@@ -110,7 +112,9 @@ class ConsultationController extends Controller
             'user_id' => $request->user,
             'description' =>  $request->description,
             'preference' =>  $request->preference,
-            'location' =>$request->location
+            'location' =>$request->location,
+            'status' => "waiting",
+            'is_confirmed' => 0
         ]);
 
         $data = Consultation::findOrFail($response->id);
@@ -246,16 +250,17 @@ class ConsultationController extends Controller
 
     public function getTodayConsultation($id) {
         try {
-            $date = Carbon::now();
+            $date = Carbon::now()->format('Y-m-d');
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=', 
                     'consultants.id')
                     ->select('consultations.id', 'consultations.title', 
                     'consultations.date', 'consultations.time')
-                    ->where('consultations.consultant_id', '=', $id)
+                    ->where('consultants.id', '=', $id)
                     ->where('consultations.status', '=', 'active')
-                    ->where('consultations.date', '=', $date->format('Y-m-d'))
+                    ->where('consultations.date', '=', $date)
                     ->get();
+            //dd($date);
             $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
@@ -410,6 +415,55 @@ class ConsultationController extends Controller
                 ], 404);
             }
         }catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => $e
+            ], 404);
+        }
+    }
+
+    public function updateConsultation(Request $request, $id) {
+        try {
+            $request->validate([
+                'preference' => ['string'],
+                'price' => ['integer'],
+                'date.date' => ['string'],
+                'date.time' => ['string'],
+                'document.title' => ['string'],
+                'document.description' => ['string'],
+            ]);
+
+            $consulData = Consultation::findOrFail($id);
+            // if(auth('consultants-api')->user()->id == $consulData->consultant_id) {
+            foreach($request->date as $data) {
+                $date = new ConsultationPreferenceDate;
+                $date->consultation_id = $id;
+                $date->date = $data["date"];
+                $date->time = $data["time"];
+                $date->save();
+            }
+    
+                foreach($request->document as $data) {
+                    $document = new ConsultationDocument;
+                    $document->consultation_id = $id;
+                    $document->name = $data["title"];
+                    $document->description = $data["description"];
+                    $document->save();
+                }
+    
+                $consulData->preference = $request->preference;
+                $consulData->consultation_price= $request->price;
+                $consulData->preferenceDate = $date;
+                $consulData->document = $document;
+                $consulData->save();
+            // } else {
+                return response()->json([
+                        'code' => 401,
+                        'message' => 'Unauthorized'
+                ], 401);
+            // }
+            //dd(auth('consultants-api')->user());
+        } catch(Exception $e) {
             return response()->json([
                 'code' => 404,
                 'message' => $e

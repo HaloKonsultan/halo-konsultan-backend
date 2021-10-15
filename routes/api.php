@@ -18,44 +18,45 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::prefix('user', ['middleware' => 'api'])->group(function () {
+Route::prefix('users', ['middleware' => 'api'])->group(function () {
     Route::post('/register', 'UserController@register');
     Route::post('/login', 'UserController@login');
     Route::post('/logout', 'UserController@logout');
     Route::get('/profile/{id}', 'UserController@profile');
-    Route::prefix('consultant')->group(function () {
+    Route::prefix('consultants')->group(function () {
         Route::get('/{id}', 'UserController@consultant');
         Route::get('/search/{name}', 'UserController@searchConsultant');
         Route::get('/category/{id}', 'CategoriesController@consultant');
+        Route::get('/city/{city}', 'CategoriesController@city');
     });
-    Route::prefix('consultation',  ['middleware' => 'api'])->group(function () {
+    Route::prefix('consultations',  ['middleware' => 'api'])->group(function () {
         Route::post('', 'ConsultationController@booking');
         Route::get('/{id}', 'ConsultationController@userConsultation');
         Route::patch('/{id}', 'ConsultationPreferenceDateController@sendDate');
-        Route::post('/{id}', 'ConsultationDocumentController@uploadDoc');
-        Route::post('/{id}/change-document/{no}', 
-        'ConsultationDocumentController@updateDoc');
+        Route::post('/{id}/upload-document/{id_document}', 
+        'ConsultationDocumentController@uploadDoc');
+        // Route::post('/{id}/change-document/{id_document}', 
+        // 'ConsultationDocumentController@updateDoc');
         Route::get('/user/{id}/status/{status}', 
         'ConsultationController@userConsultationStatus');
     });
-    Route::prefix('category', ['middleware' => 'api'])->group(function () {
+    Route::prefix('categories', ['middleware' => 'api'])->group(function () {
         Route::get('/all', 'CategoriesController@all');
         Route::get('/random', 'CategoriesController@random');
-        Route::get('/consultants/{city}', 'CategoriesController@city');
     });
 });
 
 
-Route::prefix('consultant', 
+Route::prefix('consultants', 
 ['middleware' => 'consultants-api'])->group(function () {
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
     Route::post('/logout', 'ConsultantController@logout');
     Route::get('/profile/{id}', 'ConsultantController@profile');
     Route::get('{id}/history','ConsultationController@getConsultationHistory');
-    Route::prefix('consultation', 
+    Route::prefix('consultations', 
     ['middleware' => 'consultants-api'])->group(function () {
-        Route::get('/{id}', 'ConsultationController@consultantConsultation');
+        Route::get('/{consultations_id}', 'ConsultationController@consultantConsultation');
         Route::get('/user/{id}/status/{status}', 
         'ConsultationController@getConsultationStatus');
         Route::get('/user/{id}/active', 
@@ -76,6 +77,8 @@ Route::prefix('consultant',
         'ConsultationController@acceptConsultation');
         Route::patch('/{id}/decline', 
         'ConsultationController@declineConsultation');
+        Route::patch('/{id}/after-book', 
+        'ConsultationController@updateConsultation');
     });
 });
 

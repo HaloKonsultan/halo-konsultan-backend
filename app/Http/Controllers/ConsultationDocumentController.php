@@ -23,25 +23,26 @@ class ConsultationDocumentController extends Controller
         ]]);
     }
 
-    public function uploadDoc(Request $request, $id) {
+    public function uploadDoc(Request $request, $id, $docId) {
         $request->validate([
-            'name' => ['string'],
-            'description' => ['string'],
             'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
         ]);
+        $response = Consultation::findOrFail($id);
+        $data = ConsultationDocument::findOrFail($docId);
 
-        $newFileName = $request->name . '.' . $request->file->extension();
+        $newFileName = $data->name . '.' . $request->file->extension();
         $request->file->move(public_path('storage/' . $request->id), 
         $newFileName);
 
-        $data = ConsultationDocument::create([
-            'consultation_id' => $id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'file' => $newFileName
-        ]);
+        // $data = ConsultationDocument::create([
+        //     'consultation_id' => $id,
+        //     'name' => $request->name,
+        //     'description' => $request->description,
+        //     'file' => $newFileName
+        // ]);
 
-        $response = Consultation::findOrFail($data->consultation_id);
+        $data->file = $newFileName;
+        $data->save();
         return response()->json([
             'code ' => 200,
             'message' => 'data created',
@@ -49,31 +50,31 @@ class ConsultationDocumentController extends Controller
         ],200);
     }
 
-    public function updateDoc(Request $request, $id, $documentId) {
-        $request->validate([
-            'name' => ['string'],
-            'description' => ['string'],
-            'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
-        ]);
+    // public function updateDoc(Request $request, $id, $documentId) {
+    //     $request->validate([
+    //         'name' => ['string'],
+    //         'description' => ['string'],
+    //         'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
+    //     ]);
 
-        $dataDocument = ConsultationDocument::findOrFail($documentId);
-        if($dataDocument->file != null) {
-            File::delete(public_path('/public/storage/'.$id.'/'. 
-            $dataDocument->file));
-        }
+    //     $dataDocument = ConsultationDocument::findOrFail($documentId);
+    //     if($dataDocument->file != null) {
+    //         File::delete(public_path('/public/storage/'.$id.'/'. 
+    //         $dataDocument->file));
+    //     }
 
-        $newFileName = $request->name . '.' . $request->file->extension();
-        $request->file->move(public_path('storage/'.$id .'/'), $newFileName);
+    //     $newFileName = $request->name . '.' . $request->file->extension();
+    //     $request->file->move(public_path('storage/'.$id .'/'), $newFileName);
         
-        $dataDocument->name = $request->name;
-        $dataDocument->description = $request->description;
-        $dataDocument->file = $newFileName;
-        $dataDocument->save();
+    //     $dataDocument->name = $request->name;
+    //     $dataDocument->description = $request->description;
+    //     $dataDocument->file = $newFileName;
+    //     $dataDocument->save();
 
-        return response()->json([
-            'code ' => 200,
-            'message' => 'data created',
-            'data' =>  $dataDocument
-        ],200);
-    }
+    //     return response()->json([
+    //         'code ' => 200,
+    //         'message' => 'data created',
+    //         'data' =>  $dataDocument
+    //     ],200);
+    // }
 }

@@ -134,7 +134,8 @@ class ConsultationController extends Controller
                         ->select('consultations.id', 
                         'consultations.consultant_id', 'consultants.name', 
                         'consultations.title', 'consultations.status',
-                        'consultations.is_confirmed', 'consultations.date')
+                        'consultations.is_confirmed', 'consultations.date', 
+                        'consultations.time')
                         ->where('consultations.user_id', '=', $id)
                         ->where('consultations.status', '=', $status)
                         ->get();

@@ -454,14 +454,14 @@ class ConsultationController extends Controller
     
                 $consulData->preference = $request->preference;
                 $consulData->consultation_price= $request->price;
-                $consulData->preferenceDate = $date;
-                $consulData->document = $document;
+                // $consulData->preferenceDate = $date;
+                // $consulData->document = $document;
                 $consulData->save();
             // } else {
                 return response()->json([
-                        'code' => 401,
-                        'message' => 'Unauthorized'
-                ], 401);
+                        'code' => 201,
+                        'message' => new ConsultantConsultationResource($consulData)
+                ], 201);
             // }
             //dd(auth('consultants-api')->user());
         } catch(Exception $e) {

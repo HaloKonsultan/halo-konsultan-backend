@@ -39,6 +39,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         // 'ConsultationDocumentController@updateDoc');
         Route::get('/user/{id}/status/{status}', 
         'ConsultationController@userConsultationStatus');
+        Route::patch('/transaction/{id}', 'TransactionController@update');
     });
     Route::prefix('categories', ['middleware' => 'api'])->group(function () {
         Route::get('/all', 'CategoriesController@all');

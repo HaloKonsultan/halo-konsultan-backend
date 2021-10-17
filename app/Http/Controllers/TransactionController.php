@@ -26,4 +26,21 @@ class TransactionController extends Controller
             ], 400);
         }
     }
+
+    public function end($id) {
+        try {
+            $data = Consultation::findOrFail($id);
+            $data->status = "done";
+            $data->save();
+            return response()->json([
+                'data' => $data,
+                'message' => 'data updated'
+            ],200);
+        } catch (Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => $e
+            ], 404);
+        }
+    }
 }

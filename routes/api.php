@@ -33,11 +33,11 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::post('', 'ConsultationController@booking');
         Route::get('/{id}', 'ConsultationController@userConsultation');
         Route::patch('/{id}', 'ConsultationPreferenceDateController@sendDate');
-        Route::post('/{id}/upload-document/{id_document}', 
+        Route::post('/{id}/upload-document/{id_document}',
         'ConsultationDocumentController@uploadDoc');
-        // Route::post('/{id}/change-document/{id_document}', 
+        // Route::post('/{id}/change-document/{id_document}',
         // 'ConsultationDocumentController@updateDoc');
-        Route::get('/user/{id}/status/{status}', 
+        Route::get('/user/{id}/status/{status}',
         'ConsultationController@userConsultationStatus');
         Route::patch('/transaction/{id}', 'TransactionController@update');
     });
@@ -48,38 +48,41 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
 });
 
 
-Route::prefix('consultants', 
+Route::prefix('consultants',
 ['middleware' => 'consultants-api'])->group(function () {
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
     Route::post('/logout', 'ConsultantController@logout');
     Route::get('/profile/{id}', 'ConsultantController@profile');
     Route::get('{id}/history','ConsultationController@getConsultationHistory');
-    Route::prefix('consultations', 
+    Route::prefix('consultations',
     ['middleware' => 'consultants-api'])->group(function () {
         Route::get('/{consultations_id}', 'ConsultationController@consultantConsultation');
-        Route::get('/user/{id}/status/{status}', 
+        Route::get('/user/{id}/status/{status}',
         'ConsultationController@getConsultationStatus');
-        Route::get('/user/{id}/active', 
+        Route::get('/user/{id}/active',
         'ConsultationController@getActiveConsultation');
-        Route::get('/user/{id}/incoming', 
+        Route::get('/user/{id}/incoming',
         'ConsultationController@getIncomingConsultation');
-        Route::get('/user/{id}/today', 
+        Route::get('/user/{id}/today',
         'ConsultationController@getTodayConsultation');
-        Route::get('/user/{id}/waiting', 
+        Route::get('/user/{id}/waiting',
         'ConsultationController@getWaitingConsultation');
-        Route::get('/user/{id}/done', 
+        Route::get('/user/{id}/done',
         'ConsultationController@getCompletedConsultation');
-        Route::get('/user/{id}/rejected', 
+        Route::get('/user/{id}/rejected',
         'ConsultationController@getRejectedConsultation');
-        Route::patch('/{id}/send-link', 
+        Route::patch('/{id}/send-link',
         'ConsultationController@sendLink');
-        Route::patch('/{id}/accept', 
+        Route::patch('/{id}/accept',
         'ConsultationController@acceptConsultation');
-        Route::patch('/{id}/decline', 
+        Route::patch('/{id}/decline',
         'ConsultationController@declineConsultation');
-        Route::patch('/{id}/after-book', 
+        Route::patch('/{id}/after-book',
         'ConsultationController@updateConsultation');
+        Route::patch('/{id}/end',
+        'ConsultationController@TransactionConsultation');
+
     });
 });
 

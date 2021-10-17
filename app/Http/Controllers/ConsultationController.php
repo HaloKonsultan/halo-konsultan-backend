@@ -94,8 +94,8 @@ class ConsultationController extends Controller
             'is_offline' => 'integer',
             'location' => 'string',
         ]);
-        
-        if($request->input('is_online') == 1 && 
+
+        if($request->input('is_online') == 1 &&
         $request->input('is_offline') == 1) {
             $request->preference = "online offline";
         } else if($request->input('is_online') == 1) {
@@ -129,12 +129,12 @@ class ConsultationController extends Controller
     public function userConsultationStatus($id, $status) {
         try {
             $data = DB::table('consultations')
-                        ->join('consultants', 'consultations.consultant_id', 
+                        ->join('consultants', 'consultations.consultant_id',
                         '=', 'consultants.id')
-                        ->select('consultations.id', 
-                        'consultations.consultant_id', 'consultants.name', 
+                        ->select('consultations.id',
+                        'consultations.consultant_id', 'consultants.name',
                         'consultations.title', 'consultations.status',
-                        'consultations.is_confirmed', 'consultations.date', 
+                        'consultations.is_confirmed', 'consultations.date',
                         'consultations.time')
                         ->where('consultations.user_id', '=', $id)
                         ->where('consultations.status', '=', $status)
@@ -155,10 +155,10 @@ class ConsultationController extends Controller
     public function getConsultationHistory($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
                     ->join('users', 'consultations.user_id', '=', 'users.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'users.name', 'consultations.date', 'consultations.time',
                     'consultations.status', 'consultations.is_confirmed')
                     ->where('consultations.consultant_id', '=', $id)
@@ -180,9 +180,9 @@ class ConsultationController extends Controller
     public function getConsultationStatus($id, $status) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.status')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', $status)
@@ -203,9 +203,9 @@ class ConsultationController extends Controller
     public function getActiveConsultation($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time',
                     'consultations.conference_link')
                     ->where('consultations.consultant_id', '=', $id)
@@ -228,9 +228,9 @@ class ConsultationController extends Controller
     public function getWaitingConsultation($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
@@ -253,9 +253,9 @@ class ConsultationController extends Controller
         try {
             $date = Carbon::now()->format('Y-m-d');
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time')
                     ->where('consultants.id', '=', $id)
                     ->where('consultations.status', '=', 'active')
@@ -278,9 +278,9 @@ class ConsultationController extends Controller
     public function getIncomingConsultation($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
@@ -302,9 +302,9 @@ class ConsultationController extends Controller
     public function getCompletedConsultation($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'done')
@@ -326,9 +326,9 @@ class ConsultationController extends Controller
     public function getRejectedConsultation($id) {
         try {
             $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=', 
+                    ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title', 
+                    ->select('consultations.id', 'consultations.title',
                     'consultations.date', 'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'done')
@@ -404,6 +404,7 @@ class ConsultationController extends Controller
             if($request->confirmed == 0) {
                 $data = Consultation::findOrFail($id);
                 $data->is_confirmed = $request->confirmed;
+                $data->status = 'done';
                 $data->save();
                 return response()->json([
                     'code' => 200,
@@ -443,7 +444,7 @@ class ConsultationController extends Controller
                 $date->time = $data["time"];
                 $date->save();
             }
-    
+
                 foreach($request->document as $data) {
                     $document = new ConsultationDocument;
                     $document->consultation_id = $id;
@@ -451,7 +452,7 @@ class ConsultationController extends Controller
                     $document->description = $data["description"];
                     $document->save();
                 }
-    
+
                 $consulData->preference = $request->preference;
                 $consulData->consultation_price= $request->price;
                 // $consulData->preferenceDate = $date;

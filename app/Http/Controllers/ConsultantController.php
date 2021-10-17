@@ -78,12 +78,17 @@ class ConsultantController extends Controller
                 } else {
                     return $this->respondWithToken($token, $data);
                 }
+            } else {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Login failed'
+                ],401);
             }
         }catch(\Exception $e){
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Login failed'
-            ]);
+            ],401);
         }
     }
 

@@ -21,9 +21,9 @@ class TransactionController extends Controller
             ],200);
         } catch (Exception $e) {
             return response()->json([
-                'code' => 404,
+                'code' => 400,
                 'message' => $e
-            ], 404);
+            ], 400);
         }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Consultation;
 use App\ConsultationDocument;
 use App\Http\Resources\UserConsultationResource;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -24,30 +25,37 @@ class ConsultationDocumentController extends Controller
     }
 
     public function uploadDoc(Request $request, $id, $docId) {
-        $request->validate([
-            'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
-        ]);
-        $response = Consultation::findOrFail($id);
-        $data = ConsultationDocument::findOrFail($docId);
-
-        $newFileName = $data->name . '.' . $request->file->extension();
-        $request->file->move(public_path('storage/' . $request->id), 
-        $newFileName);
-
-        // $data = ConsultationDocument::create([
-        //     'consultation_id' => $id,
-        //     'name' => $request->name,
-        //     'description' => $request->description,
-        //     'file' => $newFileName
-        // ]);
-
-        $data->file = $newFileName;
-        $data->save();
-        return response()->json([
-            'code ' => 200,
-            'message' => 'data created',
-            'data' =>  new UserConsultationResource($response)
-        ],200);
+        try {
+            $request->validate([
+                'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
+            ]);
+            $response = Consultation::findOrFail($id);
+            $data = ConsultationDocument::findOrFail($docId);
+    
+            $newFileName = $data->name . '.' . $request->file->extension();
+            $request->file->move(public_path('storage/' . $request->id), 
+            $newFileName);
+    
+            // $data = ConsultationDocument::create([
+            //     'consultation_id' => $id,
+            //     'name' => $request->name,
+            //     'description' => $request->description,
+            //     'file' => $newFileName
+            // ]);
+    
+            $data->file = $newFileName;
+            $data->save();
+            return response()->json([
+                'code ' => 200,
+                'message' => 'data created',
+                'data' =>  new UserConsultationResource($response)
+            ],200);
+        } catch(Exception $e){
+            return response()->json([
+                'code' => 400,
+                'data' => $e
+            ],400);
+        }
     }
 
     // public function updateDoc(Request $request, $id, $documentId) {

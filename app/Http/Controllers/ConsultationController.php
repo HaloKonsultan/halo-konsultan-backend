@@ -361,9 +361,9 @@ class ConsultationController extends Controller
             ], 200);
         } catch(Exception $e) {
             return response()->json([
-                'code' => 404,
-                'message' => $e
-            ], 404);
+                'code' => 400,
+                'message' => 'Bad Request'
+            ], 400);
         }
     }
 
@@ -383,9 +383,9 @@ class ConsultationController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'code' => 404,
-                    'message' => 'Unable to Update'
-                ], 404);
+                    'code' => 400,
+                    'message' => 'Bad Request'
+                ], 400);
             }
         }catch(Exception $e) {
             return response()->json([
@@ -411,9 +411,9 @@ class ConsultationController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'code' => 404,
-                    'message' => 'Unable to Update'
-                ], 404);
+                    'code' => 400,
+                    'message' => 'Bad Request'
+                ], 400);
             }
         }catch(Exception $e) {
             return response()->json([

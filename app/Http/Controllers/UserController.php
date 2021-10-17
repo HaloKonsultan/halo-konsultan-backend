@@ -59,7 +59,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'register failed',
-            ], 409);
+            ], 403);
         }
     }
 
@@ -142,7 +142,7 @@ class UserController extends Controller
             ],200);
         } catch(Exception $e) {
             return response()->json([
-                'code' => 404,
+                'code' => 400,
                 'message' => 'Not Found'
             ],404);
         }

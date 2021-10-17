@@ -56,7 +56,7 @@ class ConsultantController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'register failed',
-            ], 409);
+            ], 403);
         }
     }
 

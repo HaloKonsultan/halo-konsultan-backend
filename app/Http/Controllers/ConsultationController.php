@@ -30,7 +30,7 @@ class ConsultationController extends Controller
             'getIncomingConsultation',
             'getActiveConsultation',
             'getWaitingConsultation',
-            // 'getTodayConsultation',
+            'getTodayConsultation',
             'getCompletedConsultation',
             'getRejectedConsultation',
             'getConsultationStatus',
@@ -120,10 +120,10 @@ class ConsultationController extends Controller
         $data = Consultation::findOrFail($response->id);
 
         return response()->json([
-            'code ' => 200,
+            'code ' => 201,
             'message' => 'data created',
             'data' =>  new UserConsultationResource($data)
-        ],200);
+        ],201);
     }
 
     public function userConsultationStatus($id, $status) {
@@ -205,9 +205,11 @@ class ConsultationController extends Controller
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time',
-                    'consultations.conference_link')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id', 'users.name', 
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time', 'consultations.conference_link')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'active')
                     ->where('consultations.is_confirmed', '=', 1)
@@ -230,8 +232,11 @@ class ConsultationController extends Controller
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id','users.name', 
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
                     ->where('consultations.is_confirmed', '=', 1)
@@ -251,12 +256,15 @@ class ConsultationController extends Controller
 
     public function getTodayConsultation($id) {
         try {
-            $date = Carbon::now()->format('Y-m-d');
+            $date = Carbon::now()->format('d-m-Y');
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id', 'users.name', 
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time')
                     ->where('consultants.id', '=', $id)
                     ->where('consultations.status', '=', 'active')
                     ->where('consultations.date', '=', $date)
@@ -280,8 +288,11 @@ class ConsultationController extends Controller
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id', 'users.name', 
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'waiting')
                     ->where('consultations.is_confirmed', '=', 0)
@@ -304,8 +315,11 @@ class ConsultationController extends Controller
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id', 'users.name',  
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'done')
                     ->where('consultations.is_confirmed', '=', 1)
@@ -328,8 +342,11 @@ class ConsultationController extends Controller
             $data = DB::table('consultations')
                     ->join('consultants', 'consultations.consultant_id', '=',
                     'consultants.id')
-                    ->select('consultations.id', 'consultations.title',
-                    'consultations.date', 'consultations.time')
+                    ->join('users', 'consultations.user_id', '=',
+                    'users.id')
+                    ->select('consultations.id', 'users.name', 
+                    'consultations.title', 'consultations.date', 
+                    'consultations.time')
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'done')
                     ->where('consultations.is_confirmed', '=', 0)

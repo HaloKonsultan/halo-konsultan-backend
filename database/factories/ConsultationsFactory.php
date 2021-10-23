@@ -22,7 +22,7 @@ $factory->define(Consultation::class, function (Faker $faker) {
         'status' => $faker->randomElement(['active', 'waiting', 'done']),
         'is_confirmed' => $faker->boolean(), 
         'preference' => $faker->randomElement(['online', 'offline']), 
-        'date' => date('Y-m-d'),
+        'date' => date('d-m-Y'),
         'time' => date('H:i:s'),
         'conference_link' => $faker->url()
     ];

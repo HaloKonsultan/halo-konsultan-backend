@@ -12,7 +12,7 @@ $factory->define(ConsultationPreferenceDate::class, function (Faker $faker) {
     return [
         //
         'consultation_id' => $faker->randomElement($consultation_id), 
-        'date' => date('Y-m-d'),
+        'date' => date('d-m-Y'),
         'time' => date('H:i:s')
     ];
 });

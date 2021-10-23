@@ -24,6 +24,7 @@ class ConsultantConsultationResource extends JsonResource
             'status' => $this->status,
             'is_confirmed' => $this->is_confirmed,
             'date' => $this->date,
+            'time' => $this->time,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
             'transaction' => new TransactionResource($this->transaction),

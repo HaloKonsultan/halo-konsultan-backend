@@ -17,6 +17,8 @@ class ConsultantConsultationResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user_name' => $this->user->name,
+            'consultant_name' => $this->consultant->name,
             'description' => $this->description,
             'title' => $this->title,
             'consultation_price' => $this->consultation_price,

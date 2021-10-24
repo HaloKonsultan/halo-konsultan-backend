@@ -28,11 +28,6 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password'
     ];
-
-    public function bankDocument() {
-        return $this->hasMany('App\UserBankDocument');
-    }
-
     /**
      * The attributes that should be cast to native types.
      *

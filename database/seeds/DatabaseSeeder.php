@@ -25,8 +25,7 @@ class DatabaseSeeder extends Seeder
             ConsultantVirtualAccountSeeder::class,
             ConsultationDocumentSeeder::class,
             ConsultationPreferenceDateSeeder::class,
-            TransactionSeeder::class,
-            UserBankDocumentSeeder::class
+            TransactionSeeder::class
         ]);
 
     }

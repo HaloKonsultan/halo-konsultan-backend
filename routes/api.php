@@ -54,6 +54,7 @@ Route::prefix('consultants',
     Route::post('/login', 'ConsultantController@login');
     Route::post('/logout', 'ConsultantController@logout');
     Route::get('/profile/{id}', 'ConsultantController@profile');
+    Route::patch('/biodata/{id}', 'ConsultantController@update');
     Route::get('{id}/history','ConsultationController@getConsultationHistory');
     Route::prefix('consultations',
     ['middleware' => 'consultants-api'])->group(function () {
@@ -77,12 +78,11 @@ Route::prefix('consultants',
         Route::patch('/{id}/accept',
         'ConsultationController@acceptConsultation');
         Route::patch('/{id}/decline',
-        'ConsultationController@declineConsultation');
+        'ConsultationController@rejectConsultation');
         Route::patch('/{id}/after-book',
         'ConsultationController@updateConsultation');
         Route::patch('/{id}/end',
         'TransactionConsultation@end');
-
     });
 });
 

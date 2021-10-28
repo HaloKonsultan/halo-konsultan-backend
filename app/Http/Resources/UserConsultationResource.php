@@ -26,6 +26,7 @@ class UserConsultationResource extends JsonResource
             'time' => $this->time,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
+            'message' => $this->message,
             'consultant' => [
                 'id' => $this->consultant->id ?? '',
                 'name' => $this->consultant->name ?? '',

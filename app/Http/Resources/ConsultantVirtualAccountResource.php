@@ -17,7 +17,8 @@ class ConsultantVirtualAccountResource extends JsonResource
         return [
             'id' => $this->id,
             'card_number' => $this->card_number,
-            'bank' => $this->bank
+            'bank' => $this->bank,
+            'name' => $this->name
         ];
     }
 }

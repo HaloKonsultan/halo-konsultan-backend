@@ -29,6 +29,7 @@ class ConsultantConsultationResource extends JsonResource
             'time' => $this->time,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
+            'message' => $this->message,
             'transaction' => new TransactionResource($this->transaction),
             'consultation_document' => ConsultationDocumentResource::collection($this->document),
             'consultation_preference_date' => ConsultationPreferenceDateResource::collection($this->preferenceDate)

@@ -12,7 +12,7 @@ class Consultation extends Model
     protected $fillable = [
         'description','consultant_id', 'user_id', 'title', 'consultation_price',
         'location', 'status','is_confirmed', 'preference', 'date', 'time',
-        'conference_link'
+        'conference_link', 'message'
     ];
 
     public function consultant() {

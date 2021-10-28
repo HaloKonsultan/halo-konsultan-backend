@@ -18,6 +18,7 @@ class CreateConsultantVirtualAccountsTable extends Migration
             $table->foreignId('consultant_id')->constrained('consultants')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('card_number')->nullable();
             $table->string('bank')->nullable();
+            $table->string('name')->nullable();
             $table->timestamps();
         });
     }

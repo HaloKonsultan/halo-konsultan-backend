@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Consultant;
+use App\ConsultantEducation;
+use App\ConsultantExperience;
+use App\ConsultantSkill;
 use App\Consultation;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
@@ -27,7 +30,8 @@ class ConsultantController extends Controller
         $this->middleware('auth:consultants-api', ['except' => [
             'login', 
             'register', 
-            'logout'
+            'logout',
+            'update'
         ]]);
     }
 
@@ -105,6 +109,96 @@ class ConsultantController extends Controller
                 'message' => 'Not Found'
             ],404);
         }
+    }
+
+    public function update(Request $request, $id) {
+        try {
+            $request->validate([
+                'name' => ['required', 'string'],
+                'description' => ['required'],
+                'photo' => ['string'],
+                'gender' => ['string'],
+                'city' => ['required','string'],
+                'consultant_type' => ['string'],
+                'consultant_experience.position' => ['string'],
+                'consultant_experience.start_year' => ['string'],
+                'consultant_experience.end_year' => ['string'],
+                'consultant_skills.skills' => ['string'],
+                'consultant_educations.institution_name' => ['string'],
+                'consultant_educations.major' => ['string'],
+                'consultant_educations.start_year' => ['string'],
+                'consultant_educations.end_year' => ['string'],
+            ]);
+    
+            $data = Consultant::findOrFail($id);
+            foreach($request->consultant_experience as $experience) {
+                $consultantExperience = new ConsultantExperience();
+                $consultantExperience->consultant_id = $id;
+                $consultantExperience->position = $experience["position"];
+                if($experience["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantExperience->start_year = "Now";
+                } else {
+                    $consultantExperience->start_year = $experience["start_year"];
+                }
+    
+                if($experience["end_year"] < $experience["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantExperience->end_year = $experience["end_year"];
+                }
+                $consultantExperience->save();
+            }
+    
+            foreach($request->consultant_skills as $skills) {
+                $consultantSkills = new ConsultantSkill();
+                $consultantSkills->consultant_id = $id;
+                $consultantSkills->skills = $skills["skills"];
+                $consultantSkills->save();
+            }
+    
+            foreach($request->consultant_educations as $education) {
+                $consultantEducation = new ConsultantEducation();
+                $consultantEducation->consultant_id = $id;
+                $consultantEducation->institution_name = $education["institution_name"];
+                $consultantEducation->major = $education["major"];
+                if($education["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantEducation->start_year = "Now";
+                } else {
+                    $consultantEducation->start_year = $education["start_year"];
+                }
+                
+                if($education["end_year"] < $education["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantEducation->end_year = $education["end_year"];
+                }
+                $consultantEducation->save();
+            }
+    
+            $data->name = $request->input('name');
+            $data->description = $request->input('description');
+            $data->photo = $request->input('photo');
+            $data->gender = $request->input('gender');
+            $data->location = $request->input('city');
+            $data->category->name = $request->input('consultant_type');
+            $data->save();
+            return response()->json([
+                'code' => 200,
+                'data' => new ConsultantResource($data)
+            ]);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 400,
+                'message' => $e
+            ], 400);
+        }
+        
     }
 
     /**

@@ -36,7 +36,8 @@ class ConsultationController extends Controller
             'getConsultationStatus',
             'sendLink',
             'acceptConsultation',
-            'declineConsultation'
+            'declineConsultation',
+            'rejectConsultation'
         ]]);
 
         $this->middleware('auth:api', ['only' => [
@@ -337,6 +338,28 @@ class ConsultationController extends Controller
         }
     }
 
+    public function rejectConsultation(Request $request, $id) {
+        try {
+            $request->validate([
+                'message' => ['required']
+            ]);
+    
+            $data = Consultation::findOrFail($id);
+            $data->message = $request->input('message');
+            $data->save();
+            
+            return response()->json([
+                'code' => 200,
+                'data' => new ConsultantConsultationResource($data)
+            ]);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Bad Request'
+            ],400);
+        }
+    }
+
     public function getRejectedConsultation($id) {
         try {
             $data = DB::table('consultations')
@@ -443,24 +466,24 @@ class ConsultationController extends Controller
 
     public function updateConsultation(Request $request, $id) {
         try {
-            $request->validate([
-                'preference' => ['string'],
-                'price' => ['integer'],
-                'date.date' => ['string'],
-                'date.time' => ['string'],
-                'document.title' => ['string'],
-                'document.description' => ['string'],
-            ]);
+                $request->validate([
+                    'preference' => ['string'],
+                    'price' => ['integer'],
+                    'date.date' => ['string'],
+                    'date.time' => ['string'],
+                    'document.title' => ['string'],
+                    'document.description' => ['string'],
+                ]);
 
-            $consulData = Consultation::findOrFail($id);
-            // if(auth('consultants-api')->user()->id == $consulData->consultant_id) {
-            foreach($request->date as $data) {
-                $date = new ConsultationPreferenceDate;
-                $date->consultation_id = $id;
-                $date->date = $data["date"];
-                $date->time = $data["time"];
-                $date->save();
-            }
+                $consulData = Consultation::findOrFail($id);
+                // if(auth('consultants-api')->user()->id == $consulData->consultant_id) {
+                foreach($request->date as $data) {
+                    $date = new ConsultationPreferenceDate;
+                    $date->consultation_id = $id;
+                    $date->date = $data["date"];
+                    $date->time = $data["time"];
+                    $date->save();
+                }
 
                 foreach($request->document as $data) {
                     $document = new ConsultationDocument;

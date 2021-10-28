@@ -13,7 +13,7 @@ $factory->define(Consultation::class, function (Faker $faker) {
 
     return [
         //
-        'description' => $faker->paragraph(),
+        'description' => $faker->sentence(),
         'consultant_id' => $faker->randomElement($consultant_id) ,
         'user_id' => $faker->randomElement($user_id), 
         'title' => $faker->sentence(), 

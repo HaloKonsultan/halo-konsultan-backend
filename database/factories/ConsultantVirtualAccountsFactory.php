@@ -13,6 +13,7 @@ $factory->define(ConsultantVirtualAccount::class, function (Faker $faker) {
         //
         'consultant_id' => $faker->randomElement($consultant_id), 
         'card_number' => $faker->numerify('#######'), 
-        'bank' => $faker->randomElement(['BNI', 'Mandiri', 'BCA', 'BRI'])
+        'bank' => $faker->randomElement(['BNI', 'Mandiri', 'BCA', 'BRI']),
+        'name' => $faker->name()
     ];
 });

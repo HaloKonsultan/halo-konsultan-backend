@@ -31,7 +31,7 @@ class ConsultantResource extends JsonResource
             'consultant_documentation' => ConsultantDocumentationResource::collection($this->documentation),
             'consultant_education' => ConsultantEducationResource::collection($this->educations),
             'consultant_skill' => ConsultantSkillResource::collection($this->skills),
-            'consultant_virtual_accounts' => ConsultantVirtualAccountResource::collection($this->virtualAccount),
+            'consultant_virtual_account' => ConsultantVirtualAccountResource::collection($this->virtualAccount),
             'consultant_experience' => ConsultantExperienceResource::collection($this->experience)
         ];
     }

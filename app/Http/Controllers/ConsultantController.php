@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Consultant;
+use App\ConsultantDocumentation;
 use App\ConsultantEducation;
 use App\ConsultantExperience;
 use App\ConsultantSkill;
+use App\ConsultantVirtualAccount;
 use App\Consultation;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
@@ -199,6 +201,49 @@ class ConsultantController extends Controller
             ], 400);
         }
         
+    }
+
+    public function consultation(Request $request, $id) {
+        try {
+            $request->validate([
+                'chat_price' => ['numeric'],
+                'consultation_price' => ['numeric'],
+                'consultation_virtual_account.card_number' => ['numeric'],
+                'consultation_virtual_account.bank' => ['string'],
+                'consultation_virtual_account.name' => ['string'],
+                'consultation_doc.photo' => ['string']
+            ]);
+
+            $data = Consultant::findOrFail($id);
+            foreach($request->consultation_virtual_account as $va) {
+                $consultantVA = new ConsultantVirtualAccount();
+                $consultantVA->consultant_id = $id;
+                $consultantVA->card_number = $va["card_number"];
+                $consultantVA->bank = $va["bank"];
+                $consultantVA->name = $va["name"];
+                $consultantVA->save();
+            }
+
+            foreach($request->consultation_doc as $doc) {
+                $consultantDoc = new ConsultantDocumentation();
+                $consultantDoc->consultant_id = $id;
+                $consultantDoc->photo = $doc["photo"];
+                $consultantDoc->save();
+            }
+
+            $data->chat_price = $request->input('chat_price');
+            $data->consultation_price = $request->input('consultation_price');
+            $data->save();
+            return response()->json([
+                'code' => 200,
+                'data' => new ConsultantResource($data)
+            ]);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 400,
+                'message' => $e
+            ], 400);
+        }
     }
 
     /**

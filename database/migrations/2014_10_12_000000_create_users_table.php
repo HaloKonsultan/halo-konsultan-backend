@@ -18,7 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('location')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
             $table->string('photo')->nullable();
             $table->string('firebase_id')->nullable();
             $table->timestamps();

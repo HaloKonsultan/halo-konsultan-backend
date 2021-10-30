@@ -132,7 +132,7 @@ class UserController extends Controller
                     'categories.id')
                     ->select('consultants.id', 'consultants.name', 
                     'categories.name AS position', 'consultants.likes_total',
-                    'consultants.location', 'consultants.photo')
+                    'consultants.city', 'consultants.photo')
                     ->where('consultants.name', 'LIKE', '%'.$name.'%')
                     ->get();
             $paginated = CollectionHelper::paginate($data,2);
@@ -142,7 +142,33 @@ class UserController extends Controller
             ],200);
         } catch(Exception $e) {
             return response()->json([
-                'code' => 400,
+                'code' => 404,
+                'message' => 'Not Found'
+            ],404);
+        }
+    }
+
+    public function update(Request $request, $id) {
+        try {
+            $request->validate([
+                'name' => ['string'],
+                'province' => ['string'],
+                'city' => ['string']
+            ]);
+    
+            $data = User::findOrFail($id);
+            $data->name = $request->input('name');
+            $data->province = $request->input('province');
+            $data->city = $request->input('city');
+            $data->save();
+
+            return response()->json([
+                'code' => 200,
+                'data' => new UserResource($data)
+            ],200);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
                 'message' => 'Not Found'
             ],404);
         }

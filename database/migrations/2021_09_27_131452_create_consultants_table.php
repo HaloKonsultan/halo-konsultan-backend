@@ -21,7 +21,8 @@ class CreateConsultantsTable extends Migration
             $table->foreignId('category_id')->nullable()->constrained('categories')->onUpdate('cascade');
             $table->string('description')->nullable();
             $table->string('gender')->nullable();
-            $table->string('location')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
             $table->bigInteger('consultation_price')->nullable();
             $table->bigInteger('chat_price')->nullable();
             $table->string('photo')->nullable();

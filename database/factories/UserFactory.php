@@ -21,7 +21,8 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'location' => $faker->city(),
+        'province' => $faker->city(),
+        'city' => $faker->city(),
         'photo' => $faker->imageUrl(),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password,
         'firebase_id' => $faker->numberBetween(1,100)

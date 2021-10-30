@@ -11,8 +11,9 @@ class Consultant extends Authenticatable implements JWTSubject
     use Notifiable;
     //
     protected $fillable = [
-        'name', 'email', 'password', 'photo', 'gender', 'location', 'likes_total',
-        'description', 'category_id', 'chat_price', 'consultation_price', 'firebase_id'
+        'name', 'email', 'password', 'photo', 'gender', 'province', 'city',
+        'likes_total', 'description', 'category_id', 'chat_price', 
+        'consultation_price', 'firebase_id'
     ];
 
     protected $hidden = [

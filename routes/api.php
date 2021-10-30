@@ -23,6 +23,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
     Route::post('/login', 'UserController@login');
     Route::post('/logout', 'UserController@logout');
     Route::get('/profile/{id}', 'UserController@profile');
+    Route::get('/update/{id}', 'UserController@update');
     Route::prefix('consultants')->group(function () {
         Route::get('/{id}', 'UserController@consultant');
         Route::get('/search/{name}', 'UserController@searchConsultant');

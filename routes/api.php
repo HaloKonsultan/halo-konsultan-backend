@@ -94,7 +94,7 @@ Route::prefix('consultants',
         Route::patch('/{id}/after-book',
         'ConsultationController@updateConsultation');
         Route::patch('/{id}/end',
-        'TransactionConsultation@end');
+        'TransactionController@end');
     });
 });
 

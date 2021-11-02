@@ -40,7 +40,7 @@ class ConsultationController extends Controller
             'confirmed' => ['integer']
         ]);
 
-        if($request->confirmed == 1) {
+        if($request->confirmed == 0) {
             $data->is_confirmed = $request->confirmed;
             $data->status = 'done';
             $data->message = $request->input('message');

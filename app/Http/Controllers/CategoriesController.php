@@ -27,10 +27,10 @@ class CategoriesController extends Controller
     {
         try {
             $data = ParentCategories::all();
-            $res =  ParentCategoriesResource::collection($data);
+            $response =  ParentCategoriesResource::collection($data);
             return response()->json([
                 'code' => 200,
-                'data' => $res
+                'data' => $response
             ],200);
         }catch(Exception $e) {
             return response()->json([

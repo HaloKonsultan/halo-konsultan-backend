@@ -3,44 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Consultation;
-use Exception;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     //
 
-    public function update($id) {
-        try {
-            $data = Consultation::findOrFail($id);
-            $data->status = "active";
-            $data->save();
+    public function update(Request $request, $id) {
+        $data = Consultation::findOrFail($id);
+        if($request->user()->cannot('update', $data)) {
             return response()->json([
-                'data' => $data,
-                'message' => 'data updated'
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'code' => 400,
-                'message' => $e
-            ], 400);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+        $data->status = "active";
+        $data->save();
+        return response()->json([
+            'data' => $data,
+            'message' => 'data updated'
+        ],200);
     }
 
     public function end($id) {
-        try {
-            $data = Consultation::findOrFail($id);
-            $data->status = "done";
-            $data->save();
+        $data = Consultation::findOrFail($id);
+        if(auth('consultants-api')->user()->cannot('update', $data)) {
             return response()->json([
-                'data' => $data,
-                'message' => 'data updated'
-            ],200);
-        } catch (Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => $e
-            ], 404);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+        $data->status = "done";
+        $data->save();
+        return response()->json([
+            'data' => $data,
+            'message' => 'data updated'
+        ],200);
     }
 }

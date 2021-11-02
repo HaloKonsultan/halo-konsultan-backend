@@ -25,37 +25,28 @@ class ConsultationDocumentController extends Controller
     }
 
     public function uploadDoc(Request $request, $id, $docId) {
-        try {
-            $request->validate([
-                'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
-            ]);
-            $response = Consultation::findOrFail($id);
-            $data = ConsultationDocument::findOrFail($docId);
-    
-            $newFileName = $data->name . '.' . $request->file->extension();
-            $request->file->move(public_path('storage/' . $request->id), 
-            $newFileName);
-    
-            // $data = ConsultationDocument::create([
-            //     'consultation_id' => $id,
-            //     'name' => $request->name,
-            //     'description' => $request->description,
-            //     'file' => $newFileName
-            // ]);
-    
-            $data->file = $newFileName;
-            $data->save();
+        $request->validate([
+            'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
+        ]);
+        $data = ConsultationDocument::findOrFail($docId);
+        if(auth('api')->user()->cannot('update', $data)) {
             return response()->json([
-                'code ' => 200,
-                'message' => 'data created',
-                'data' =>  new UserConsultationResource($response)
-            ],200);
-        } catch(Exception $e){
-            return response()->json([
-                'code' => 400,
-                'data' => $e
-            ],400);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+
+        $response = Consultation::findOrFail($id);
+        $newFileName = $data->name . '.' . $request->file->extension();
+        $request->file->move(public_path('storage/' . $request->id), 
+        $newFileName);    
+        $data->file = $newFileName;
+        $data->save();
+        return response()->json([
+            'code ' => 200,
+            'message' => 'data created',
+            'data' =>  new UserConsultationResource($response)
+        ],200);
     }
 
     // public function updateDoc(Request $request, $id, $documentId) {

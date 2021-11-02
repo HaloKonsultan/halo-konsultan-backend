@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Consultant;
+use App\Consultation;
+use App\Policies\ConsultantConsultationPolicy;
+use App\Policies\UserConsultationPolicy;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,6 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
+        Consultation::class => UserConsultationPolicy::class,
+        Consultation::class => ConsultantConsultationPolicy::class
     ];
 
     /**
@@ -26,5 +34,12 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('show-consultant-query', function (Consultant $consultant, $id) {
+            return $consultant->id === $id;
+        });
+
+        Gate::define('update-data-consultant', function (Consultant $consultant, $id) {
+            return $consultant->id === $id;
+        });
     }
 }

@@ -29,7 +29,6 @@ class ConsultantController extends Controller
             'login', 
             'register', 
             'logout',
-            'update'
         ]]);
     }
 

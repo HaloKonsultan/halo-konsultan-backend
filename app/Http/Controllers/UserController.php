@@ -16,6 +16,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -96,18 +97,18 @@ class UserController extends Controller
     }
 
     public function profile($id) {
-        try {
-            $data =  User::findOrFail($id);
+        if(Gate::denies('show-user', (int)$id)) {
             return response()->json([
-                'code' => 200,
-                'data' => new UserResource($data)
-            ],200);
-        } catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+        
+        $data =  User::findOrFail($id);
+        return response()->json([
+            'code' => 200,
+            'data' => new UserResource($data)
+        ],200);
     }
 
     public function consultant($id) {
@@ -149,29 +150,29 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id) {
-        try {
-            $request->validate([
-                'name' => ['string'],
-                'province' => ['string'],
-                'city' => ['string']
-            ]);
-    
-            $data = User::findOrFail($id);
-            $data->name = $request->input('name');
-            $data->province = $request->input('province');
-            $data->city = $request->input('city');
-            $data->save();
-
+        if(Gate::denies('update-data-user', (int)$id)) {
             return response()->json([
-                'code' => 200,
-                'data' => new UserResource($data)
-            ],200);
-        } catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+
+        $request->validate([
+            'name' => ['string'],
+            'province' => ['string'],
+            'city' => ['string']
+        ]);
+
+        $data = User::findOrFail($id);
+        $data->name = $request->input('name');
+        $data->province = $request->input('province');
+        $data->city = $request->input('city');
+        $data->save();
+
+        return response()->json([
+            'code' => 200,
+            'data' => new UserResource($data)
+        ],200);
     }
 
     /**

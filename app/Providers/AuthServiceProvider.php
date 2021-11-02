@@ -41,5 +41,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-data-consultant', function (Consultant $consultant, $id) {
             return $consultant->id === $id;
         });
+
+        Gate::define('update-data-user', function (User $user, $id) {
+            return $user->id === $id;
+        });
+
+        Gate::define('show-user', function (User $user, $id) {
+            return $user->id === $id;
+        });
     }
 }

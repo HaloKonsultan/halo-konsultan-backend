@@ -68,7 +68,6 @@ class UserConsultationController extends Controller
         ]);
 
         $data = Consultation::findOrFail($response->id);
-
         return response()->json([
             'code ' => 201,
             'message' => 'data created',

@@ -35,7 +35,7 @@ class CategoriesController extends Controller
         }catch(Exception $e) {
             return response()->json([
                 'code' => 404,
-                'message' => 'Not Found'
+                'message' => $e
             ],404);
         }
     }
@@ -51,7 +51,7 @@ class CategoriesController extends Controller
         }  catch(Exception $e) {
             return response()->json([
                 'code' => 404,
-                'message' => 'Not Found'
+                'message' => $e
             ],404);
         }
     }
@@ -64,7 +64,7 @@ class CategoriesController extends Controller
                 'categories.id')
                 ->select('consultants.id', 'consultants.name', 
                 'categories.name AS position','consultants.likes_total',
-                'consultants.location', 'consultants.photo')
+                'consultants.city', 'consultants.photo')
                 ->where('consultants.location', 'LIKE', '%' . $city . '%')
                 ->get();
             $paginated = CollectionHelper::paginate($data, 10);
@@ -75,7 +75,7 @@ class CategoriesController extends Controller
         } catch(Exception $e) {
             return response()->json([
                 'code' => 404,
-                'message' => 'Not Found'
+                'message' => $e
             ],404);
         }
     }
@@ -87,10 +87,11 @@ class CategoriesController extends Controller
                         ->leftJoin('categories', 'consultants.category_id', '=', 
                         'categories.id')
                         ->select('consultants.id', 'consultants.name', 
-                        'categories.name AS position', 'consultants.location', 
+                        'categories.name AS position', 'consultants.city', 
                         'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
                         ->get();
+                        dd($data);
             $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,
@@ -99,7 +100,7 @@ class CategoriesController extends Controller
         } catch(Exception $e) {
             return response()->json([
                 'code' => 404,
-                'message' => 'Not Found'
+                'message' => $e
             ],404);
         }
     }

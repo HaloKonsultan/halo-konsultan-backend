@@ -7,6 +7,7 @@ use App\Helpers\CollectionHelper;
 use App\Http\Resources\UserConsultationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserConsultationController extends Controller
 {
@@ -76,10 +77,9 @@ class UserConsultationController extends Controller
     }
 
     public function userConsultationStatus(Request $request, $id, $status) {
-        $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id',
+        $data = Consultation::join('consultants', 'consultations.consultant_id',
                     '=', 'consultants.id')
-                    ->select('consultations.id',
+                    ->select('consultations.id', 'consultations.user_id',
                     'consultations.consultant_id', 'consultants.name',
                     'consultations.title', 'consultations.status',
                     'consultations.is_confirmed', 'consultations.date',
@@ -87,7 +87,8 @@ class UserConsultationController extends Controller
                     ->where('consultations.user_id', '=', $id)
                     ->where('consultations.status', '=', $status)
                     ->get();
-        if($request->user()->cannot('view', $data)) {
+                    
+        if(Gate::denies('show-user', (int)$id)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'

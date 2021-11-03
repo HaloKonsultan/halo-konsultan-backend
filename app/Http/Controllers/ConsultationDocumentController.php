@@ -8,6 +8,7 @@ use App\Http\Resources\UserConsultationResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
 
 class ConsultationDocumentController extends Controller
 {
@@ -29,7 +30,7 @@ class ConsultationDocumentController extends Controller
             'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
         ]);
         $data = ConsultationDocument::findOrFail($docId);
-        if(auth('api')->user()->cannot('update', $data)) {
+        if(Gate::denies('user-consultation-document', $data)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'

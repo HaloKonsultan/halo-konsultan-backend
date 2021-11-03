@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Consultant;
 use App\Consultation;
+use App\ConsultationDocument;
 use App\Policies\ConsultantConsultationPolicy;
 use App\Policies\UserConsultationPolicy;
 use App\User;
@@ -20,7 +21,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
-        Consultation::class => UserConsultationPolicy::class,
         Consultation::class => ConsultantConsultationPolicy::class
     ];
 
@@ -48,6 +48,14 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('show-user', function (User $user, $id) {
             return $user->id === $id;
+        });
+
+        Gate::define('user-consultation', function (User $user, Consultation $consultation) {
+            return $user->id === $consultation->user_id;
+        });
+
+        Gate::define('user-consultation-document', function (User $user, ConsultationDocument $consultationDocument) {
+            return $user->id === $consultationDocument->user_id;
         });
     }
 }

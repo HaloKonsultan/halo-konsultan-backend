@@ -21,9 +21,9 @@ class UserConsultationController extends Controller
         ]]);
     }
 
-    public function userConsultation(Request $request, $id) {
+    public function userConsultation($id) {
         $data = Consultation::findOrFail($id);
-        if($request->user()->cannot('view', $data)) {
+        if(Gate::denies('user-consultation', $data)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
@@ -76,7 +76,7 @@ class UserConsultationController extends Controller
         ],201);
     }
 
-    public function userConsultationStatus(Request $request, $id, $status) {
+    public function userConsultationStatus($id, $status) {
         $data = Consultation::join('consultants', 'consultations.consultant_id',
                     '=', 'consultants.id')
                     ->select('consultations.id', 'consultations.user_id',

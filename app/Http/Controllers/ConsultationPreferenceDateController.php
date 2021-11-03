@@ -6,6 +6,7 @@ use App\Consultation;
 use App\Http\Resources\UserConsultationResource;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ConsultationPreferenceDateController extends Controller
 {
@@ -24,7 +25,7 @@ class ConsultationPreferenceDateController extends Controller
         ]);
 
         $data = Consultation::findOrFail($id);
-        if(auth('api')->user()->cannot('update', $data)) {
+        if(Gate::denies('user-consultation', $data)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'

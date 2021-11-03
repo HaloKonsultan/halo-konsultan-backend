@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Consultation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TransactionController extends Controller
 {
     //
 
-    public function update(Request $request, $id) {
+    public function update($id) {
         $data = Consultation::findOrFail($id);
-        if($request->user()->cannot('update', $data)) {
+        if(Gate::denies('user-consultation', $data)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class CategoriesController extends Controller
 {
     //
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
@@ -65,7 +65,7 @@ class CategoriesController extends Controller
                 ->select('consultants.id', 'consultants.name', 
                 'categories.name AS position','consultants.likes_total',
                 'consultants.city', 'consultants.photo')
-                ->where('consultants.location', 'LIKE', '%' . $city . '%')
+                ->where('consultants.city', 'LIKE', '%' . $city . '%')
                 ->get();
             $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
@@ -91,7 +91,7 @@ class CategoriesController extends Controller
                         'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
                         ->get();
-                        dd($data);
+                        
             $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,

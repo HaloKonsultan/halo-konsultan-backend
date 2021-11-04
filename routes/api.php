@@ -61,7 +61,7 @@ Route::prefix('consultants',
     Route::prefix('profile')->group(function(){
         Route::get('/{id}', 'ConsultantController@profile');
         Route::patch('/biodata/{id}', 'ConsultantController@update');
-        Route::patch('/consultation/{id}', 'ConsultantController@consultation');
+        Route::put('/consultation/{id}', 'ConsultantController@consultation');
     });
 
     Route::get('{id}/history',

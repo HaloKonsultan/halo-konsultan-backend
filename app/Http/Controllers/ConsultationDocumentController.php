@@ -30,14 +30,13 @@ class ConsultationDocumentController extends Controller
             'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:5048']
         ]);
         $data = ConsultationDocument::findOrFail($docId);
-        if(Gate::denies('user-consultation-document', $data)) {
+        $response = Consultation::findOrFail($id);
+        if(Gate::denies('user-consultation', $response)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
             ],403);
         }
-
-        $response = Consultation::findOrFail($id);
         $newFileName = $data->name . '.' . $request->file->extension();
         $request->file->move(public_path('storage/' . $request->id), 
         $newFileName);    

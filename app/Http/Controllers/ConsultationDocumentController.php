@@ -31,7 +31,7 @@ class ConsultationDocumentController extends Controller
         ]);
         $data = ConsultationDocument::findOrFail($docId);
         $response = Consultation::findOrFail($id);
-        if(Gate::denies('user-consultation', $response)) {
+        if(Gate::denies('user-consultation-document', [$response, $data])) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'

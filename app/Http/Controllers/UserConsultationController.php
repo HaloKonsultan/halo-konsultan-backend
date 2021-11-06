@@ -79,7 +79,7 @@ class UserConsultationController extends Controller
     public function userConsultationStatus($id, $status) {
         $data = Consultation::join('consultants', 'consultations.consultant_id',
                     '=', 'consultants.id')
-                    ->select('consultations.id', 'consultations.user_id',
+                    ->select('consultations.id', 'consultations.user_id AS user_id',
                     'consultations.consultant_id', 'consultants.name',
                     'consultations.title', 'consultations.status',
                     'consultations.is_confirmed', 'consultations.date',

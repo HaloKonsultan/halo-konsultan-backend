@@ -86,9 +86,9 @@ class CategoriesController extends Controller
             $data = DB::table('consultants')
                         ->leftJoin('categories', 'consultants.category_id', '=', 
                         'categories.id')
-                        ->select('consultants.id', 'consultants.name', 
-                        'categories.name AS position', 'consultants.city', 
-                        'consultants.photo')
+                        ->select('consultants.id', 'categories.id AS category_id',
+                        'consultants.name', 'categories.name AS position', 
+                        'consultants.city', 'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
                         ->get();
                         

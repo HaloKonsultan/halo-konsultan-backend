@@ -58,17 +58,17 @@ class ConsultantConsultationController extends Controller
                 'consultations.is_confirmed')
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
-                ->get();
+                ->paginate(10);
         if(Gate::denies('show-consultant-query', (int)$id)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
             ],403);
         }
-        $paginated = CollectionHelper::paginate($data,10);
+        // $paginated = CollectionHelper::paginate($data,10);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -80,17 +80,17 @@ class ConsultantConsultationController extends Controller
                 'consultations.date', 'consultations.status')
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', $status)
-                ->get();
+                ->paginate(10);
         if(Gate::denies('show-consultant-query', (int)$id)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
             ],403);
         }
-        $paginated = CollectionHelper::paginate($data,10);
+        // $paginated = CollectionHelper::paginate($data,10);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -112,11 +112,11 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->get();
-        $paginated = CollectionHelper::paginate($data,5);
+                ->paginate(5);
+        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -138,11 +138,11 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->get();
-        $paginated = CollectionHelper::paginate($data,5);
+                ->paginate(5);
+        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -165,11 +165,11 @@ class ConsultantConsultationController extends Controller
                 ->where('consultants.id', '=', $id)
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.date', '=', $date)
-                ->get();
-        $paginated = CollectionHelper::paginate($data,5);
+                ->paginate(5);
+        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -191,11 +191,11 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 0)
-                ->get();
-        $paginated = CollectionHelper::paginate($data,5);
+                ->paginate(5);
+        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -217,11 +217,11 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->get();
-        $paginated = CollectionHelper::paginate($data,5);
+                ->paginate();
+        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 
@@ -238,11 +238,11 @@ class ConsultantConsultationController extends Controller
                     ->where('consultations.consultant_id', '=', $id)
                     ->where('consultations.status', '=', 'done')
                     ->where('consultations.is_confirmed', '=', 0)
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,5);
+                    ->paginate(5);
+            // $paginated = CollectionHelper::paginate($data,5);
             return response()->json([
                 'code' => 200,
-                'data' => $paginated
+                'data' => $data
             ],200);
         }catch(Exception $e) {
             return response()->json([

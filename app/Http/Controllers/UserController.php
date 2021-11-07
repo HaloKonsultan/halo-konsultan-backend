@@ -135,11 +135,11 @@ class UserController extends Controller
                     'categories.name AS position', 'consultants.likes_total',
                     'consultants.city', 'consultants.photo')
                     ->where('consultants.name', 'LIKE', '%'.$name.'%')
-                    ->get();
-            $paginated = CollectionHelper::paginate($data,2);
+                    ->paginate(5);
+            // $paginated = CollectionHelper::paginate($data,2);
             return response()->json([
                 'code' => 200,
-                'data' => $paginated
+                'data' => $data
             ],200);
         } catch(Exception $e) {
             return response()->json([

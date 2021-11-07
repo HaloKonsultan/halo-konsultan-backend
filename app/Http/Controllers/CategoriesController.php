@@ -66,11 +66,11 @@ class CategoriesController extends Controller
                 'categories.name AS position','consultants.likes_total',
                 'consultants.city', 'consultants.photo')
                 ->where('consultants.city', 'LIKE', '%' . $city . '%')
-                ->get();
-            $paginated = CollectionHelper::paginate($data, 10);
+                ->paginate(10);
+            // $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,
-                'data' => $paginated
+                'data' => $data
             ]);
         } catch(Exception $e) {
             return response()->json([
@@ -90,12 +90,12 @@ class CategoriesController extends Controller
                         'consultants.name', 'categories.name AS position', 
                         'consultants.city', 'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
-                        ->get();
+                        ->paginate(10);
                         
-            $paginated = CollectionHelper::paginate($data, 10);
+            // $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,
-                'data' => $paginated
+                'data' => $data
             ]);
         } catch(Exception $e) {
             return response()->json([

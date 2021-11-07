@@ -86,7 +86,7 @@ class UserConsultationController extends Controller
                     'consultations.time')
                     ->where('consultations.user_id', '=', $id)
                     ->where('consultations.status', '=', $status)
-                    ->get();
+                    ->paginate(10);
                     
         if(Gate::denies('show-user', (int)$id)) {
             return response()->json([
@@ -94,10 +94,10 @@ class UserConsultationController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
-        $paginated = CollectionHelper::paginate($data,10);
+        // $paginated = CollectionHelper::paginate($data,10);
         return response()->json([
             'code' => 200,
-            'data' => $paginated
+            'data' => $data
         ],200);
     }
 }

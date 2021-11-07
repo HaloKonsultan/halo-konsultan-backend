@@ -9,6 +9,7 @@ use App\ConsultantEducation;
 use App\ConsultantExperience;
 use App\ConsultantSkill;
 use App\ConsultantVirtualAccount;
+use App\ConsultationDocument;
 use App\Http\Resources\ConsultantResource;
 use Carbon\Carbon;
 use Exception;
@@ -210,27 +211,46 @@ class ConsultantController extends Controller
         $request->validate([
             'chat_price' => ['numeric'],
             'consultation_price' => ['numeric'],
+            'consultation_virtual_account.id' => ['integer'],
             'consultation_virtual_account.card_number' => ['numeric'],
             'consultation_virtual_account.bank' => ['string'],
             'consultation_virtual_account.name' => ['string'],
+            'consultation_doc.id' => ['integer'],
             'consultation_doc.photo' => ['string']
         ]);
 
+        
         $data = Consultant::findOrFail($id);
         foreach($request->consultation_virtual_account as $va) {
-            $consultantVA = new ConsultantVirtualAccount();
-            $consultantVA->consultant_id = $id;
-            $consultantVA->card_number = $va["card_number"];
-            $consultantVA->bank = $va["bank"];
-            $consultantVA->name = $va["name"];
-            $consultantVA->save();
+            if($va["id"] < 0) {
+                $consultantVA = new ConsultantVirtualAccount();
+                $consultantVA->consultant_id = $id;
+                $consultantVA->card_number = $va["card_number"];
+                $consultantVA->bank = $va["bank"];
+                $consultantVA->name = $va["name"];
+                $consultantVA->save();
+            } else {
+                $consultantVA = ConsultantVirtualAccount::findOrFail($va["id"]);
+                $consultantVA->consultant_id = $id;
+                $consultantVA->card_number = $va["card_number"];
+                $consultantVA->bank = $va["bank"];
+                $consultantVA->name = $va["name"];
+                $consultantVA->save();
+            }
         }
 
         foreach($request->consultation_doc as $doc) {
-            $consultantDoc = new ConsultantDocumentation();
-            $consultantDoc->consultant_id = $id;
-            $consultantDoc->photo = $doc["photo"];
-            $consultantDoc->save();
+            if($doc["id"] < 0) {
+                $consultantDoc = new ConsultantDocumentation();
+                $consultantDoc->consultant_id = $id;
+                $consultantDoc->photo = $doc["photo"];
+                $consultantDoc->save();
+            } else {
+                $consultantDoc = ConsultationDocument::findOrFail($doc["id"]);
+                $consultantDoc->consultant_id = $id;
+                $consultantDoc->photo = $doc["photo"];
+                $consultantDoc->save();
+            }
         }
 
         $data->chat_price = $request->input('chat_price');

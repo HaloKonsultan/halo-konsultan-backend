@@ -125,10 +125,13 @@ class ConsultantController extends Controller
             'province' => ['string'],
             'city' => ['required','string'],
             'consultant_type' => ['string'],
+            'consultant_experience.id' => ['integer'],
             'consultant_experience.position' => ['string'],
             'consultant_experience.start_year' => ['string'],
             'consultant_experience.end_year' => ['string'],
+            'consultant_skills.id' => ['integer'],
             'consultant_skills.skills' => ['string'],
+            'consultant_educations.id' => ['integer'],
             'consultant_educations.institution_name' => ['string'],
             'consultant_educations.major' => ['string'],
             'consultant_educations.start_year' => ['string'],
@@ -137,53 +140,104 @@ class ConsultantController extends Controller
 
         $data = Consultant::findOrFail($id);
         foreach($request->consultant_experience as $experience) {
-            $consultantExperience = new ConsultantExperience();
-            $consultantExperience->consultant_id = $id;
-            $consultantExperience->position = $experience["position"];
-            if($experience["start_year"] == Carbon::now()->format('Y')) {
-                $consultantExperience->start_year = "Now";
+            if($experience["id"] < 0) {
+                $consultantExperience = new ConsultantExperience();
+                $consultantExperience->consultant_id = $id;
+                $consultantExperience->position = $experience["position"];
+                if($experience["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantExperience->start_year = "Now";
+                } else {
+                    $consultantExperience->start_year = $experience["start_year"];
+                }
+    
+                if($experience["end_year"] < $experience["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantExperience->end_year = $experience["end_year"];
+                }
+                $consultantExperience->save();
             } else {
-                $consultantExperience->start_year = $experience["start_year"];
-            }
-
-            if($experience["end_year"] < $experience["start_year"]) {
-                return response()->json([
-                    'code' => 400,
-                    'Message' => 'End year less than start year'
-                ]);
-            } else {
-                $consultantExperience->end_year = $experience["end_year"];
-            }
-            $consultantExperience->save();
+                $consultantExperience = ConsultantExperience::find($experience["id"]);
+                $consultantExperience->consultant_id = $id;
+                $consultantExperience->position = $experience["position"];
+                if($experience["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantExperience->start_year = "Now";
+                } else {
+                    $consultantExperience->start_year = $experience["start_year"];
+                }
+    
+                if($experience["end_year"] < $experience["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantExperience->end_year = $experience["end_year"];
+                }
+                $consultantExperience->save();
+            }  
         }
 
         foreach($request->consultant_skills as $skills) {
-            $consultantSkills = new ConsultantSkill();
-            $consultantSkills->consultant_id = $id;
-            $consultantSkills->skills = $skills["skills"];
-            $consultantSkills->save();
+            if($skills["id"] < 0) {
+                $consultantSkills = new ConsultantSkill();
+                $consultantSkills->consultant_id = $id;
+                $consultantSkills->skills = $skills["skills"];
+                $consultantSkills->save();
+            } else {
+                $consultantSkills = ConsultantSkill::find($skills["id"]);
+                $consultantSkills->consultant_id = $id;
+                $consultantSkills->skills = $skills["skills"];
+                $consultantSkills->save();
+            }
+            
         }
 
         foreach($request->consultant_educations as $education) {
-            $consultantEducation = new ConsultantEducation();
-            $consultantEducation->consultant_id = $id;
-            $consultantEducation->institution_name = $education["institution_name"];
-            $consultantEducation->major = $education["major"];
-            if($education["start_year"] == Carbon::now()->format('Y')) {
-                $consultantEducation->start_year = "Now";
-            } else {
-                $consultantEducation->start_year = $education["start_year"];
+            if($education["id"] < 0) {
+                $consultantEducation = new ConsultantEducation();
+                $consultantEducation->consultant_id = $id;
+                $consultantEducation->institution_name = $education["institution_name"];
+                $consultantEducation->major = $education["major"];
+                if($education["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantEducation->start_year = "Now";
+                } else {
+                    $consultantEducation->start_year = $education["start_year"];
+                }
+                
+                if($education["end_year"] < $education["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantEducation->end_year = $education["end_year"];
+                }
+                $consultantEducation->save();
+            }else {
+                $consultantEducation = ConsultantEducation::find($education["id"]);
+                $consultantEducation->consultant_id = $id;
+                $consultantEducation->institution_name = $education["institution_name"];
+                $consultantEducation->major = $education["major"];
+                if($education["start_year"] == Carbon::now()->format('Y')) {
+                    $consultantEducation->start_year = "Now";
+                } else {
+                    $consultantEducation->start_year = $education["start_year"];
+                }
+                
+                if($education["end_year"] < $education["start_year"]) {
+                    return response()->json([
+                        'code' => 400,
+                        'Message' => 'End year less than start year'
+                    ]);
+                } else {
+                    $consultantEducation->end_year = $education["end_year"];
+                }
+                $consultantEducation->save();
             }
-            
-            if($education["end_year"] < $education["start_year"]) {
-                return response()->json([
-                    'code' => 400,
-                    'Message' => 'End year less than start year'
-                ]);
-            } else {
-                $consultantEducation->end_year = $education["end_year"];
-            }
-            $consultantEducation->save();
         }
 
         $data->name = $request->input('name');
@@ -230,7 +284,7 @@ class ConsultantController extends Controller
                 $consultantVA->name = $va["name"];
                 $consultantVA->save();
             } else {
-                $consultantVA = ConsultantVirtualAccount::findOrFail($va["id"]);
+                $consultantVA = ConsultantVirtualAccount::find($va["id"]);
                 $consultantVA->consultant_id = $id;
                 $consultantVA->card_number = $va["card_number"];
                 $consultantVA->bank = $va["bank"];
@@ -246,7 +300,7 @@ class ConsultantController extends Controller
                 $consultantDoc->photo = $doc["photo"];
                 $consultantDoc->save();
             } else {
-                $consultantDoc = ConsultationDocument::findOrFail($doc["id"]);
+                $consultantDoc = ConsultationDocument::find($doc["id"]);
                 $consultantDoc->consultant_id = $id;
                 $consultantDoc->photo = $doc["photo"];
                 $consultantDoc->save();

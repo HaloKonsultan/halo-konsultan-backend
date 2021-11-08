@@ -300,7 +300,7 @@ class ConsultantController extends Controller
                 $consultantDoc->photo = $doc["photo"];
                 $consultantDoc->save();
             } else {
-                $consultantDoc = ConsultationDocument::find($doc["id"]);
+                $consultantDoc = ConsultantDocumentation::find($doc["id"]);
                 $consultantDoc->consultant_id = $id;
                 $consultantDoc->photo = $doc["photo"];
                 $consultantDoc->save();

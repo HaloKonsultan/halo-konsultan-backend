@@ -98,3 +98,5 @@ Route::prefix('consultants',
     });
 });
 
+Route::post('transaction/{id}', 'TransactionController@createInvoice');
+Route::post('test','TransactionController@callback');

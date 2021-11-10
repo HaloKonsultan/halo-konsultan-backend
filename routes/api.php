@@ -98,5 +98,11 @@ Route::prefix('consultants',
     });
 });
 
-Route::post('transaction/{id}', 'TransactionController@createInvoice');
-Route::post('test','TransactionController@callback');
+Route::prefix('transaction')->group(function(){
+    Route::post('/{id_consultation}/pay', 'TransactionController@createInvoice');
+    Route::post('/invoice_callback','TransactionController@invoiceCallback');
+    Route::get('/{id_consultation}', 'TransactionController@getTransanction');
+    Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
+    Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
+});
+

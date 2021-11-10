@@ -11,7 +11,14 @@ $factory->define(Transaction::class, function (Faker $faker) {
 
     return [
         //
-        'consultation_id' => $faker->randomElement($consultation_id), 
-        'status' => $faker->randomElement(['waiting', 'completed', 'failed'])
+        'consultation_id' => $faker->randomElement($consultation_id),
+        'status_invoice' => $faker->randomElement(['PAID', 'PENDING', 'EXPIRED']),
+        'status_disbursment'  => $faker->randomElement(['PENDING', 'EXPIRED', 'COMPLETED']), 
+        'amount' => $faker->numberBetween(10000,200000), 
+        'invoice_url' => $faker->url(), 
+        'expiry_date' => $faker->date(),
+        'bank_code' => $faker->randomElement(), 
+        'account_holder_name' => $faker->name(), 
+        'account_number' => $faker->numerify('###########')
     ];
 });

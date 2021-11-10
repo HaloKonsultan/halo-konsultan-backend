@@ -42,12 +42,18 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         // 'ConsultationDocumentController@updateDoc');
         Route::get('/user/{id}/status/{status}',
         'UserConsultationController@userConsultationStatus');
-        Route::patch('/transaction/{id}', 'TransactionController@update');
+        // Route::patch('/transaction/{id}', 'TransactionController@update');
     });
 
     Route::prefix('categories', ['middleware' => 'api'])->group(function () {
         Route::get('/all', 'CategoriesController@all');
         Route::get('/random', 'CategoriesController@random');
+    });
+
+    Route::prefix('transaction')->group(function(){
+        Route::post('/{id_consultation}/pay', 'TransactionController@createInvoice');
+        Route::post('/invoice_callback','TransactionController@invoiceCallback');
+        Route::get('/{id_transaction}', 'TransactionController@getTransanction');
     });
 });
 
@@ -97,13 +103,19 @@ Route::prefix('consultants',
         Route::patch('/{id}/end',
         'TransactionController@end');
     });
+
+    Route::prefix('transaction')->group(function(){
+        Route::get('/{id_consultation}', 'TransactionController@getTransanction');
+        Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
+        Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
+    });
 });
 
-Route::prefix('transaction')->group(function(){
-    Route::post('/{id_consultation}/pay', 'TransactionController@createInvoice');
-    Route::post('/invoice_callback','TransactionController@invoiceCallback');
-    Route::get('/{id_consultation}', 'TransactionController@getTransanction');
-    Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
-    Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
-});
+// Route::prefix('transaction')->group(function(){
+//     Route::post('/{id_consultation}/pay', 'TransactionController@createInvoice');
+//     Route::post('/invoice_callback','TransactionController@invoiceCallback');
+//     Route::get('/{id_consultation}', 'TransactionController@getTransanction');
+//     Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
+//     Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
+// });
 

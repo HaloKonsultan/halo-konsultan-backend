@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::prefix('users', ['middleware' => 'api'])->group(function () {
     Route::post('/register', 'UserController@register');
     Route::post('/login', 'UserController@login');
@@ -42,7 +38,6 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         // 'ConsultationDocumentController@updateDoc');
         Route::get('/user/{id}/status/{status}',
         'UserConsultationController@userConsultationStatus');
-        // Route::patch('/transaction/{id}', 'TransactionController@update');
     });
 
     Route::prefix('categories', ['middleware' => 'api'])->group(function () {
@@ -110,12 +105,3 @@ Route::prefix('consultants',
         Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
     });
 });
-
-// Route::prefix('transaction')->group(function(){
-//     Route::post('/{id_consultation}/pay', 'TransactionController@createInvoice');
-//     Route::post('/invoice_callback','TransactionController@invoiceCallback');
-//     Route::get('/{id_consultation}', 'TransactionController@getTransanction');
-//     Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
-//     Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
-// });
-

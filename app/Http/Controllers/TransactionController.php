@@ -72,7 +72,7 @@ class TransactionController extends Controller
         $newTransaction->save();
         return response()->json([
             'code' => 201,
-            'data' => $createInvoice,
+            'data' => $newTransaction,
             'message' => 'created'
         ],200);
     }

@@ -63,6 +63,9 @@ Route::prefix('consultants',
         Route::patch('/biodata/{id}', 'ConsultantController@update');
         Route::put('/consultation/{id}', 'ConsultantController@consultation');
         Route::delete('/virtual_account/{id}','ConsultantVirtualAccountController@destroy');
+        Route::delete('/documentation/{id}', 'ConsultantDocumentationController@destroy');
+        Route::delete('/education/{id}', 'ConsultantEducationController@destroy');
+        Route::delete('/skill/{id}', 'ConsultantSkillController@destroy');
     });
 
     Route::get('{id}/history',

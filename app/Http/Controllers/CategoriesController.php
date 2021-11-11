@@ -90,7 +90,7 @@ class CategoriesController extends Controller
                         'consultants.name', 'categories.name AS position', 
                         'consultants.city', 'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
-                        ->paginate(10);
+                        ->paginate(5);
                         
             // $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([

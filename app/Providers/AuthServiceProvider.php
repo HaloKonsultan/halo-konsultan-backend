@@ -3,9 +3,19 @@
 namespace App\Providers;
 
 use App\Consultant;
+use App\ConsultantDocumentation;
+use App\ConsultantEducation;
+use App\ConsultantExperience;
+use App\ConsultantSkill;
+use App\ConsultantVirtualAccount;
 use App\Consultation;
 use App\ConsultationDocument;
 use App\Policies\ConsultantConsultationPolicy;
+use App\Policies\ConsultantDocumentationPolicy;
+use App\Policies\ConsultantEducationPolicy;
+use App\Policies\ConsultantExperiencePolicy;
+use App\Policies\ConsultantSkillPolicy;
+use App\Policies\ConsultantVirtualAccountPolicy;
 use App\Policies\UserConsultationPolicy;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -21,7 +31,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
-        Consultation::class => ConsultantConsultationPolicy::class
+        Consultation::class => ConsultantConsultationPolicy::class,
+        ConsultantVirtualAccount::class => ConsultantVirtualAccountPolicy::class,
+        ConsultantEducation::class => ConsultantEducationPolicy::class,
+        ConsultantDocumentation::class => ConsultantDocumentationPolicy::class,
+        ConsultantExperience::class => ConsultantExperiencePolicy::class,
+        ConsultantSkill::class => ConsultantSkillPolicy::class
     ];
 
     /**

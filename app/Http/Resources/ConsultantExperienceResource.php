@@ -15,6 +15,7 @@ class ConsultantExperienceResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'position' => $this->position,
             'start_year' => $this->start_year,
             'end_year' => $this->end_year

@@ -15,6 +15,17 @@ use Illuminate\Support\Str;
 class TransactionController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth:consultants-api', ['only' => [
+            'createDisbursement'
+        ]]);
+
+        $this->middleware('auth:api', ['only' => [
+            'getTransanction',
+            'createInvoice'
+        ]]);
+    }
 
     public function update($id) {
         $data = Consultation::findOrFail($id);

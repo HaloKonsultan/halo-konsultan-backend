@@ -31,6 +31,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
     Route::prefix('consultations',  ['middleware' => 'api'])->group(function () {
         Route::post('', 'UserConsultationController@booking');
         Route::get('/{id}', 'UserConsultationController@userConsultation');
+        Route::post('/review/{id}', 'UserConsultationController@reviewConsultation');
         Route::patch('/{id}', 'ConsultationPreferenceDateController@sendDate');
         Route::post('/{id}/upload-document/{id_document}',
         'ConsultationDocumentController@uploadDoc');
@@ -98,6 +99,8 @@ Route::prefix('consultants',
         Route::patch('/{id}/end',
         'TransactionController@end');
     });
+
+    Route::get('/categories', 'CategoriesController@all');
 
     Route::prefix('transaction')->group(function(){
         Route::get('/{id_consultation}', 'TransactionController@getTransanction');

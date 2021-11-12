@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Consultation;
+use App\Consultant;
+use Exception;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\UserConsultationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+
+use function PHPUnit\Framework\returnSelf;
 
 class UserConsultationController extends Controller
 {
@@ -99,5 +103,30 @@ class UserConsultationController extends Controller
             'code' => 200,
             'data' => $data
         ],200);
+    }
+
+    public function reviewConsultation(Request $request, $id) {
+        $this->validate($request,[
+            'is_like' => 'integer'
+        ]);
+
+        try {
+            $consultation = Consultation::findOrFail($id);
+            $data = Consultant::findOrFail($consultation->consultant_id);
+            // dd($request->is_like);
+            if ($request->is_like == '1') {
+                $data->likes_total++;
+            }
+            $data->save();
+            return response()->json([
+                'code' => 200,
+                'data' => $data
+            ],200);
+        } catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Not Found'
+            ], 404);
+        }
     }
 }

@@ -113,7 +113,6 @@ class UserConsultationController extends Controller
         try {
             $consultation = Consultation::findOrFail($id);
             $data = Consultant::findOrFail($consultation->consultant_id);
-            // dd($request->is_like);
             if ($request->is_like == '1') {
                 $data->likes_total++;
             }

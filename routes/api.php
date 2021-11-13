@@ -41,7 +41,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         'UserConsultationController@userConsultationStatus');
     });
 
-    Route::prefix('categories', ['middleware' => 'api'])->group(function () {
+    Route::prefix('categories')->group(function () {
         Route::get('/all', 'CategoriesController@all');
         Route::get('/random', 'CategoriesController@random');
     });

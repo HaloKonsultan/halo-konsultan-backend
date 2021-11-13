@@ -28,6 +28,7 @@ class ConsultantResource extends JsonResource
             'chat_price' => $this->chat_price,
             'consultation_price' => $this->consultation_price,
             'firebase_id' => $this->firebase_id,
+            'category_id' => $this->category_id,
             'position' => $this->category->name ?? '',
             'consultant_documentation' => ConsultantDocumentationResource::collection($this->documentation),
             'consultant_education' => ConsultantEducationResource::collection($this->educations),

@@ -119,12 +119,12 @@ class ConsultantController extends Controller
 
         $request->validate([
             'name' => ['required', 'string'],
-            'description' => ['string'],
-            'photo' => ['string'],
-            'gender' => ['string'],
-            'province' => ['string'],
-            'city' => ['string'],
-            'consultant_type' => ['integer'],
+            'description' => ['required', 'string'],
+            'photo' => ['required','string'],
+            'gender' => ['required','string'],
+            'province' => ['required', 'string'],
+            'city' => ['required','string'],
+            'consultant_type' => ['required', 'integer'],
             'consultant_experience.id' => ['integer'],
             'consultant_experience.position' => ['string'],
             'consultant_experience.start_year' => ['string'],

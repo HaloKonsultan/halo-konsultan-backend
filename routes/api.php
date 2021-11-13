@@ -62,7 +62,7 @@ Route::prefix('consultants',
     
     Route::prefix('profile')->group(function(){
         Route::get('/{id}', 'ConsultantController@profile');
-        Route::put('/biodata/{id}', 'ConsultantController@update');
+        Route::patch('/biodata/{id}', 'ConsultantController@update');
         Route::put('/consultation/{id}', 'ConsultantController@consultation');
         Route::delete('/virtual_account/{id}','ConsultantVirtualAccountController@destroy');
         Route::delete('/documentation/{id}', 'ConsultantDocumentationController@destroy');

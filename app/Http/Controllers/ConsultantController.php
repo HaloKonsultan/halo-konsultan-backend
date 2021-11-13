@@ -119,11 +119,11 @@ class ConsultantController extends Controller
 
         $request->validate([
             'name' => ['required', 'string'],
-            'description' => ['required'],
+            'description' => ['string'],
             'photo' => ['string'],
             'gender' => ['string'],
             'province' => ['string'],
-            'city' => ['required','string'],
+            'city' => ['string'],
             'consultant_type' => ['integer'],
             'consultant_experience.id' => ['integer'],
             'consultant_experience.position' => ['string'],

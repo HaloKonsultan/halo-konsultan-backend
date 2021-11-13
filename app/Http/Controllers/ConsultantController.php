@@ -124,7 +124,7 @@ class ConsultantController extends Controller
             'gender' => ['string'],
             'province' => ['string'],
             'city' => ['required','string'],
-            'consultant_type' => ['string'],
+            'consultant_type' => ['integer'],
             'consultant_experience.id' => ['integer'],
             'consultant_experience.position' => ['string'],
             'consultant_experience.start_year' => ['string'],
@@ -246,7 +246,7 @@ class ConsultantController extends Controller
         $data->gender = $request->input('gender');
         $data->province = $request->input('province');
         $data->city = $request->input('city');
-        $data->category->name = $request->input('consultant_type');
+        $data->category_id = $request->input('consultant_type');
         $data->save();
         return response()->json([
             'code' => 200,

@@ -103,7 +103,7 @@ Route::prefix('consultants',
         'TransactionController@end');
     });
 
-    Route::get('/categories', 'CategoriesController@all');
+    Route::get('/categories', 'CategoriesController@consultantCategories');
 
     Route::prefix('transaction')->group(function(){
         Route::get('/{id_consultation}', 'TransactionController@getTransanction');

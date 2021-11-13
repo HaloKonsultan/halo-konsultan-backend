@@ -22,7 +22,7 @@ class CategoriesController extends Controller
     {
         $this->middleware('auth:api', ['except' => [
             'all',
-            'random'
+            'consultantCategories'
         ]]);
     }
 
@@ -34,6 +34,21 @@ class CategoriesController extends Controller
             return response()->json([
                 'code' => 200,
                 'data' => $response
+            ],200);
+        }catch(Exception $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => $e
+            ],404);
+        }
+    }
+
+    public function consultantCategories() {
+        try {
+            $data = Categories::all();
+            return response()->json([
+                'code' => 200,
+                'data' => $data
             ],200);
         }catch(Exception $e) {
             return response()->json([

@@ -186,8 +186,8 @@ class ConsultantConsultationController extends Controller
                 ->join('users', 'consultations.user_id', '=',
                 'users.id')
                 ->select('consultations.id', 'users.name', 
-                'consultations.title', 'consultations.date', 
-                'consultations.time')
+                'consultations.title', 'consultations.date',
+                'consultations.created_at', 'consultations.time')
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 0)

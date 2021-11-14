@@ -59,7 +59,7 @@ Route::prefix('consultants',
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
     Route::post('/logout', 'ConsultantController@logout');
-    
+
     Route::prefix('profile')->group(function(){
         Route::get('/{id}', 'ConsultantController@profile');
         Route::patch('/biodata/{id}', 'ConsultantController@update');
@@ -68,6 +68,7 @@ Route::prefix('consultants',
         Route::delete('/documentation/{id}', 'ConsultantDocumentationController@destroy');
         Route::delete('/education/{id}', 'ConsultantEducationController@destroy');
         Route::delete('/skill/{id}', 'ConsultantSkillController@destroy');
+        Route::delete('/experience/{id}', 'ConsultantExperienceController@destroy');
     });
 
     Route::get('{id}/history',
@@ -75,7 +76,7 @@ Route::prefix('consultants',
 
     Route::prefix('consultations',
     ['middleware' => 'consultants-api'])->group(function () {
-        Route::get('/{consultations_id}', 
+        Route::get('/{consultations_id}',
         'ConsultantConsultationController@consultantConsultation');
         Route::get('/user/{id}/status/{status}',
         'ConsultantConsultationController@getConsultationStatus');

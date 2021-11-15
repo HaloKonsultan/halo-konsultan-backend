@@ -43,7 +43,11 @@ class TransactionController extends Controller
         ],200);
     }
 
-    public function end($id) {
+    public function end(Request $request, $id) {
+        $request->validate([
+            'message' => ['string']
+        ]);
+
         $data = Consultation::findOrFail($id);
         if(auth('consultants-api')->user()->cannot('update', $data)) {
             return response()->json([
@@ -51,6 +55,7 @@ class TransactionController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
+        $data->message = $request->message;
         $data->status = "done";
         $data->save();
         return response()->json([

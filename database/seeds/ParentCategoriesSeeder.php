@@ -13,6 +13,23 @@ class ParentCategoriesSeeder extends Seeder
     public function run()
     {
         //
-        factory(ParentCategories::class,4)->create();
+        $data = [
+            [
+                'name' => 'Konsultan Agama'
+            ],
+            [
+                'name' => 'Konsultan Keuangan'
+            ],
+            [
+                'name' => 'Konsultan Bangunan'
+            ],
+            [
+                'name' => 'Konsultan Kesehatan'
+            ],
+        ];
+
+        foreach($data as $key => $value) {
+            ParentCategories::create($value);
+        }
     }
 }

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ConsultantController extends Controller
 {
@@ -120,7 +121,7 @@ class ConsultantController extends Controller
         $request->validate([
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'photo' => ['required','string'],
+            // 'photo' => ['image','mimes:jpg,png,jpeg', 'max:2048'],
             'gender' => ['required','string'],
             'province' => ['required', 'string'],
             'city' => ['required','string'],
@@ -242,11 +243,36 @@ class ConsultantController extends Controller
 
         $data->name = $request->input('name');
         $data->description = $request->input('description');
-        $data->photo = $request->input('photo');
+        // $data->photo = $image;
         $data->gender = $request->input('gender');
         $data->province = $request->input('province');
         $data->city = $request->input('city');
         $data->category_id = $request->input('consultant_type');
+        $data->save();
+        return response()->json([
+            'code' => 200,
+            'data' => new ConsultantResource($data)
+        ]);
+    }
+
+    public function uploadImage(Request $request, $id) {
+        if(Gate::denies('update-data-consultant', (int)$id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
+        $request->validate([
+            'photo' => ['image','mimes:jpg,png,jpeg', 'max:1024'],
+        ]);
+
+        $data = Consultant::findOrFail($id);
+        $imageName = Str::random(50) . "." . $request->photo->extension();
+        $path = public_path('images/');
+        $request->photo->move($path, $imageName);
+        $image = "images/" . $imageName;
+        $data->photo = $image;
         $data->save();
         return response()->json([
             'code' => 200,

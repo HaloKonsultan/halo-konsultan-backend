@@ -116,7 +116,7 @@ class ConsultantConsultationController extends Controller
         // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
-            'data' => $data
+            'data' => new ConsultantConsultationResource($data)
         ],200);
     }
 
@@ -133,8 +133,10 @@ class ConsultantConsultationController extends Controller
                 ->join('users', 'consultations.user_id', '=',
                 'users.id')
                 ->select('consultations.id','users.name', 
-                'consultations.title', 'consultations.date', 
-                'consultations.created_at', 'consultations.time')
+                'consultations.title', 'consultations.date',
+                DB::raw("DATE_FORMAT(consultations.created_at, '%d-%m-%Y') AS date_created"),
+                DB::raw("DATE_FORMAT(consultations.created_at, '%H:%i') AS time_created"),
+                )
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 1)
@@ -186,8 +188,9 @@ class ConsultantConsultationController extends Controller
                 ->join('users', 'consultations.user_id', '=',
                 'users.id')
                 ->select('consultations.id', 'users.name', 
-                'consultations.title', 'consultations.date',
-                'consultations.created_at', 'consultations.time')
+                'consultations.title', 'consultations.date', 'consultations.time',
+                DB::raw("DATE_FORMAT(consultations.created_at, '%d-%m-%Y') AS date_created"),
+                DB::raw("DATE_FORMAT(consultations.created_at, '%H:%i') AS time_created"))
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 0)

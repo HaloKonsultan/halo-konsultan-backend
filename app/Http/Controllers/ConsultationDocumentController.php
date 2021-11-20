@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ConsultationDocumentController extends Controller
 {
@@ -37,10 +38,11 @@ class ConsultationDocumentController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
-        $newFileName = $data->name . '.' . $request->file->extension();
+        $newFileName = Str::random(50) . '.' . $request->file->extension();
         $request->file->move(public_path('storage/' . $request->id), 
-        $newFileName);    
-        $data->file = $newFileName;
+        $newFileName);
+        $path = "storage/" . $request->id . "/" . $newFileName;    
+        $data->file = $path;
         $data->save();
         return response()->json([
             'code ' => 200,

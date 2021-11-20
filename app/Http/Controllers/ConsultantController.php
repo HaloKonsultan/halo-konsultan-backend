@@ -121,7 +121,6 @@ class ConsultantController extends Controller
         $request->validate([
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            // 'photo' => ['image','mimes:jpg,png,jpeg', 'max:2048'],
             'gender' => ['required','string'],
             'province' => ['required', 'string'],
             'city' => ['required','string'],
@@ -243,7 +242,6 @@ class ConsultantController extends Controller
 
         $data->name = $request->input('name');
         $data->description = $request->input('description');
-        // $data->photo = $image;
         $data->gender = $request->input('gender');
         $data->province = $request->input('province');
         $data->city = $request->input('city');

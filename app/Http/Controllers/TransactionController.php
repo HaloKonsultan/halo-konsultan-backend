@@ -55,15 +55,9 @@ class TransactionController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
-        $user = $data->user->device_token;
-        $message = [
-            'title' => 'Consultation Ended',
-            'body' => 'Consultation about : ' . $data->title . ' ended'
-        ];
         $data->message = $request->message;
         $data->status = "done";
         $data->save();
-        $this->sendNotification(array($user),array($message));
         return response()->json([
             'data' => $data,
             'message' => 'data updated'
@@ -106,12 +100,6 @@ class TransactionController extends Controller
         $consultationUpdate = Consultation::findOrFail($transcation->consultation_id);
         $consultationUpdate->status = "active";
         $consultationUpdate->save();
-        $user = $consultationUpdate->user->device_token;
-        $message = [
-            'title' => 'Payment successfully',
-            'body' => 'Consultation about : ' . $consultationUpdate->title . ' is active'
-        ];
-        $this->sendNotification(array($user),array($message));
         return response()->json([
             'code' => 200,
             'message' => 'Payment Successfully'

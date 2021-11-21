@@ -51,6 +51,8 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::post('/invoice_callback','TransactionController@invoiceCallback');
         Route::get('/{id_transaction}', 'TransactionController@getTransanction');
     });
+
+    Route::post('notification/{id}', 'NotificationController@sendConsultant');
 });
 
 
@@ -112,4 +114,6 @@ Route::prefix('consultants',
         Route::post('/withdraw/{id_consultation}', 'TransactionController@createDisbursement');
         Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
     });
+
+    Route::post('notification/{id}', 'NotificationController@sendUser');
 });

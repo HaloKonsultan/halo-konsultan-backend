@@ -79,6 +79,9 @@ class ConsultantController extends Controller
                 if(! $token = auth()->login($data)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 } else {
+                    $consultant = Consultant::where('email', $request->email)->first();
+                    $consultant->device_token =  $request->device_token;
+                    $consultant->save();
                     return $this->respondWithToken($token, $data);
                 }
             } else {
@@ -347,6 +350,10 @@ class ConsultantController extends Controller
      */
     public function logout()
     {
+        $email = auth('consultants-api')->user()->email;
+        $data = Consultant::where('email', $email)->first();
+        $data->device_token = "";
+        $data->save();
         auth('consultants-api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);

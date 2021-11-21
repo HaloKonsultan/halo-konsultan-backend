@@ -80,6 +80,9 @@ class UserController extends Controller
                 if(! $token = auth()->login($data)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 } else {
+                    $user = User::where('email', $request->email)->first();
+                    $user->device_token =  $request->device_token;
+                    $user->save();
                     return $this->respondWithToken($token, $data);
                 }
             } else {
@@ -182,8 +185,12 @@ class UserController extends Controller
      */
     public function logout()
     {
+        $email = auth('api')->user()->email;
+        $data = User::where('email', $email)->first();
+        $data->device_token = "";
+        $data->save();
         auth('api')->logout();
-
+        
         return response()->json(['message' => 'Successfully logged out']);
     }
 

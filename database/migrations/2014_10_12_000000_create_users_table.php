@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('province')->nullable();
             $table->string('city')->nullable();
             $table->string('photo')->nullable();
-            $table->string('firebase_id')->nullable();
+            $table->string('device_token')->nullable();
             $table->timestamps();
         });
     }

@@ -73,6 +73,12 @@ class UserConsultationController extends Controller
         ]);
 
         $data = Consultation::findOrFail($response->id);
+        $user = $data->user->device_token;
+        $message = [
+            'title' => 'Consultation Accepted',
+            'body' => 'New consultation about : ' . $data->title
+        ];
+        $this->sendNotification(array($user),array($message));
         return response()->json([
             'code ' => 201,
             'message' => 'data created',

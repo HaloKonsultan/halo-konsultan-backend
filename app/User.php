@@ -17,8 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'province', 'city', 'photo', 
-        'firebase_id'
+        'name', 'email', 'password', 'province', 'city', 'photo'
     ];
 
     /**
@@ -27,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password'
+        'password', 'device_token'
     ];
     /**
      * The attributes that should be cast to native types.

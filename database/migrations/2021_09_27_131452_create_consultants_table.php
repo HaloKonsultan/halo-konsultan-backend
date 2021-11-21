@@ -27,7 +27,7 @@ class CreateConsultantsTable extends Migration
             $table->bigInteger('chat_price')->nullable();
             $table->string('photo')->nullable();
             $table->integer('likes_total')->nullable();
-            $table->string('firebase_id')->nullable();
+            $table->string('device_token')->nullable();
             $table->timestamps();
         });
     }

@@ -13,11 +13,11 @@ class Consultant extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'email', 'password', 'photo', 'gender', 'province', 'city',
         'likes_total', 'description', 'category_id', 'chat_price', 
-        'consultation_price', 'firebase_id'
+        'consultation_price'
     ];
 
     protected $hidden = [
-        'password'
+        'password', 'device_token'
     ];
 
     public function category() {

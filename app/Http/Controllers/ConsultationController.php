@@ -39,13 +39,18 @@ class ConsultationController extends Controller
             'message' => ['required'],
             'confirmed' => ['integer']
         ]);
-
+        $user = $data->user->device_token;
+        $message = [
+            'title' => 'Consultation Rejected',
+            'body' => 'Consultation about : ' . $data->title . ' is rejected'
+        ];
         if($request->confirmed == 0) {
             $data->is_confirmed = $request->confirmed;
             $data->status = 'done';
             $data->message = $request->input('message');
             $data->save();
         }
+        $this->sendNotification(array($user),array($message));
         return response()->json([
             'code' => 200,
             'data' => new ConsultantConsultationResource($data)
@@ -73,14 +78,23 @@ class ConsultationController extends Controller
 
     public function acceptConsultation(Request $request, $id) {
         try {
+            $data = Consultation::findOrFail($id);
             $request->validate([
                 'confirmed' => ['integer']
             ]);
+
+            $data = Consultation::findOrFail($id);
+            $user = $data->user->device_token;
+            $message = [
+                'title' => 'Consultation Accepted',
+                'body' => 'Consultation about : ' . $data->title . ' is accepted'
+            ];
 
             if($request->confirmed == 1) {
                 $data = Consultation::findOrFail($id);
                 $data->is_confirmed = $request->confirmed;
                 $data->save();
+                $this->sendNotification(array($user),array($message));
                 return response()->json([
                     'code' => 200,
                     'message' => 'Data Updated'

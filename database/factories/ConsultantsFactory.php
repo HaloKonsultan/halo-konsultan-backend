@@ -23,6 +23,6 @@ $factory->define(Consultant::class, function (Faker $faker) {
         'description'=> $faker->sentence(), 
         'chat_price' => $faker->randomDigit(), 
         'consultation_price' => $faker->randomDigit(), 
-        'firebase_id'=> $faker->numberBetween(1,100)
+        'device_token' => $faker->numerify('###asasa###')
     ];
 });

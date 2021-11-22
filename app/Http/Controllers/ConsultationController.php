@@ -39,16 +39,16 @@ class ConsultationController extends Controller
             'message' => ['required'],
             'confirmed' => ['integer']
         ]);
-
         if($request->confirmed == 0) {
             $data->is_confirmed = $request->confirmed;
             $data->status = 'done';
             $data->message = $request->input('message');
             $data->save();
         }
+
         return response()->json([
             'code' => 200,
-            'data' => new ConsultantConsultationResource($data)
+            'data' => 'Consultation Rejected'
         ]);
     }
 
@@ -72,30 +72,29 @@ class ConsultationController extends Controller
     }
 
     public function acceptConsultation(Request $request, $id) {
-        try {
-            $request->validate([
-                'confirmed' => ['integer']
-            ]);
-
-            if($request->confirmed == 1) {
-                $data = Consultation::findOrFail($id);
-                $data->is_confirmed = $request->confirmed;
-                $data->save();
-                return response()->json([
-                    'code' => 200,
-                    'message' => 'Data Updated'
-                ], 200);
-            } else {
-                return response()->json([
-                    'code' => 400,
-                    'message' => 'Bad Request'
-                ], 400);
-            }
-        }catch(Exception $e) {
+        $data = Consultation::findOrFail($id);
+        if(auth('consultants-api')->user()->cannot('update', $data)) {
             return response()->json([
-                'code' => 404,
-                'message' => $e
-            ], 404);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+        $request->validate([
+            'confirmed' => ['integer']
+        ]);
+
+        if($request->confirmed == 1) {
+            $data->is_confirmed = $request->confirmed;
+            $data->save();
+            return response()->json([
+                'code' => 200,
+                'message' => 'Consultation Accepted'
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Bad Request'
+            ], 400);
         }
     }
 

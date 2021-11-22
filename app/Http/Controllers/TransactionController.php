@@ -102,7 +102,7 @@ class TransactionController extends Controller
         $consultationUpdate->save();
         return response()->json([
             'code' => 200,
-            'message' => 'Masuk bro'
+            'message' => 'Payment Successfully'
         ], 200);
     }
 

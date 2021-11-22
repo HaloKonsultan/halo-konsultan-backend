@@ -52,7 +52,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::get('/{id_transaction}', 'TransactionController@getTransanction');
     });
 
-    Route::post('notification/{id}', 'NotificationController@sendConsultant');
+    Route::post('notification/{id}', 'NotificationController@sendUser');
 });
 
 
@@ -115,5 +115,5 @@ Route::prefix('consultants',
         Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
     });
 
-    Route::post('notification/{id}', 'NotificationController@sendUser');
+    Route::post('notification/{id}', 'NotificationController@sendConsultant');
 });

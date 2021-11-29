@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Forum;
-use App\Http\Resources\ForumResource;
+use App\Http\Resources\ConsultantForumResource;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\UserForumResource;
 use App\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MessageController extends Controller
 {
@@ -14,21 +16,28 @@ class MessageController extends Controller
     public function __construct()
     {
         $this->middleware('auth:consultants-api', ['only' => [
-            'getAllMessagesConsultant',
             'readByConsultant',
-            'consultantSend'
+            'consultantSend',
+            'getConsultantAllMessage'
         ]]);
 
         $this->middleware('auth:api', ['only' => [
             'readByUser',
             'userSend',
-            'getAllMessagesClient'
+            'getUserAllMessage'
         ]]);
     }
 
     public function readByConsultant($id) {
         $data = Message::findOrFail($id);
         $data->is_read = 1;
+        $consultantId = $data->forum->consultant_id;
+        if(Gate::denies('consultant-update', $consultantId)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
         $data->save();
 
         return response()->json([
@@ -40,6 +49,13 @@ class MessageController extends Controller
     public function readByUser($id) {
         $data = Message::findOrFail($id);
         $data->is_read = 1;
+        $userId = $data->forum->user_id;
+        if(Gate::denies('update-data-user', $userId)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
         $data->save();
 
         return response()->json([
@@ -49,9 +65,16 @@ class MessageController extends Controller
     }
 
     public function userSend(Request $request, $id) {
+        if(Gate::denies('update-data-user', $request->user_id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
         $message = Message::create([
             'forum_id' => $id,
-            'sender' => $request->name,
+            'sender' => 'client',
             'message' => $request->message,
             'is_read' => 0
         ]);
@@ -63,9 +86,16 @@ class MessageController extends Controller
     }
 
     public function consultantSend(Request $request, $id) {
+        if(Gate::denies('consultant-update', $request->consultant_id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
         $message = Message::create([
             'forum_id' => $id,
-            'sender' => $request->name,
+            'sender' => 'consultant',
             'message' => $request->message,
             'is_read' => 0
         ]);
@@ -76,19 +106,32 @@ class MessageController extends Controller
         ], 201);
     }
 
-    public function getAllMessagesClient($id) {
-        $response = Forum::findOrFail($id);
+    public function getConsultantAllMessage($id) {
+        $data = Forum::findOrFail($id);
+        if(Gate::denies('consultant-forum', $data)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
         return response()->json([
             'code' => 200,
-            'data' => new ForumResource($response)
+            'data' => new ConsultantForumResource($data)
         ]);
     }
 
-    public function getAllMessagesConsultant($id) {
-        $response = Forum::findOrFail($id);
+    public function getUserAllMessage($id) {
+        $data = Forum::findOrFail($id);
+        if(Gate::denies('user-forum', $data)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
         return response()->json([
             'code' => 200,
-            'data' => new ForumResource($response)
+            'data' => new UserForumResource($data)
         ]);
     }
 }

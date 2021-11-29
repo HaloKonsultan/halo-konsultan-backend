@@ -44,6 +44,10 @@ class Consultant extends Authenticatable implements JWTSubject
         return $this->hasMany('App\ConsultantDocumentation');
     }
 
+    public function forum() {
+        return $this->hasMany('App\Forum');
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

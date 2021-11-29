@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ForumResource extends JsonResource
+class UserForumResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,6 +22,7 @@ class ForumResource extends JsonResource
             'consultant_category' => $this->consultant->category->name,
             'user_id' => $this->user_id,
             'is_ended' => $this->is_ended,
+            'time' => Carbon::parse($this->created_at)->format('d m Y'),
             'message' => MessageResource::collection($this->message)
         ];
     }

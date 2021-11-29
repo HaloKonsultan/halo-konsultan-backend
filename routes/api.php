@@ -52,8 +52,12 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::get('/{id_transaction}', 'TransactionController@getTransanction');
     });
 
-    Route::prefix()->group(function(){
-        
+    Route::prefix('forums')->group(function () {
+        Route::post('open-conversation', 'ForumController@conversation');
+        Route::post('send/{id}', 'MessageController@userSend');
+        Route::patch('read/{id}', 'MessageController@readByUser');
+        Route::get('get-all-conversation/{id}', 'ForumController@getClientAllConversation');
+        Route::get('get-all-messages/{id}', 'MessageController@getUserAllMessage');
     });
 
     Route::post('notification/{id}', 'NotificationController@sendUser');
@@ -119,10 +123,13 @@ Route::prefix('consultants',
         Route::post('/withdraw_callback', 'TransactionController@disbursmentCallback');
     });
 
+    Route::prefix('forums', ['middleware' => 'consultants-api'])->group(function () {
+        Route::patch('end-conversation/{id}', 'ForumController@endConversation');
+        Route::post('send/{id}', 'MessageController@consultantSend');
+        Route::patch('read/{id}', 'MessageController@readByConsultant');
+        Route::get('get-all-conversation/{id}', 'ForumController@getConsultantAllConversation');
+        Route::get('get-all-messages/{id}', 'MessageController@getConsultantAllMessage');
+    });
+
     Route::post('notification/{id}', 'NotificationController@sendConsultant');
 });
-
-
-Route::post('create', 'MessageController@conversation');
-Route::get('show/{id}', 'ForumController@show');
-Route::get('read/{id}','MessageController@getAllMessagesClient');

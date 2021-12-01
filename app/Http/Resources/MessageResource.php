@@ -18,6 +18,7 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'sender' => $this->sender,
+            'forum_id' => $this->forum_id,
             'message' => $this->message,
             'is_read' => $this->is_read,
             'time' => Carbon::parse($this->created_at)->format('H:i')

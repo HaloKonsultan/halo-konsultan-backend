@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Forum;
 use App\Http\Resources\ConsultantForumResource;
 use App\Http\Resources\UserForumResource;
+use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -30,14 +31,13 @@ class ForumController extends Controller
         ->where('consultant_id', $request->consultant_id)
         ->first();
 
-        if(Gate::denies('user-forum', $forum)) {
-            return response()->json([
-                'code' => 403,
-                'message' => 'Forbidden'
-            ],403);
-        }
-
         if($forum) {
+            if(Gate::denies('user-forum',$forum)) {
+                return response()->json([
+                    'code' => 403,
+                    'message' => 'Forbidden'
+                ],403);
+            }
             $forum->is_ended = 0;
             $forum->save();
         } else {
@@ -45,6 +45,20 @@ class ForumController extends Controller
                 'consultant_id' => $request->consultant_id,
                 'user_id' => $request->user_id,
                 'is_ended' => 0
+            ]);
+            if(Gate::denies('update-data-user',(int)$forum->user_id)) {
+                return response()->json([
+                    'code' => 403,
+                    'message' => 'Forbidden'
+                ],403);
+            }
+            $forum->is_ended = 0;
+            $forum->save();
+            $message = Message::create([
+                'forum_id' => $forum->id,
+                'sender' => 'consultant',
+                'message' => 'Silahkan tuliskan masukkan judul dan deskripsi permasalahan',
+                'is_read' => 0
             ]);
         }
         
@@ -83,10 +97,11 @@ class ForumController extends Controller
                 ->leftJoin('forums','messages.forum_id', '=','forums.id')
                 ->rightJoin('users', 'forums.user_id', '=', 'users.id')
                 ->rightJoin('consultants', 'forums.consultant_id', '=', 'consultants.id')
-                ->select('messages.forum_id', 'messages.message', 
-                'consultants.name', 'consultants.photo', 
+                ->rightJoin('categories', 'consultants.category_id', '=', 'categories.id')
+                ->select('forums.id','consultants.id', 'users.id','forums.is_ended', 'categories.name as category',
+                'consultants.name', 'consultants.photo', 'messages.message as last_message',
                 DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS 
-                time"))
+                last_messages_time"), 'messages.is_read as last_messages_is_read')
                 ->where('users.id', '=', $id)
                 ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM MESSAGES GROUP BY FORUM_ID)')
                 ->paginate(10);
@@ -109,9 +124,10 @@ class ForumController extends Controller
                 ->leftJoin('forums','messages.forum_id', '=','forums.id')
                 ->rightJoin('consultants', 'forums.consultant_id', '=', 'consultants.id')
                 ->rightJoin('users', 'forums.user_id', '=', 'users.id')
-                ->select('messages.forum_id', 'messages.message', 'users.name',
-                DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS 
-                time"))
+                ->select('forums.id', 'users.name as user_name',
+                'users.id as user_id', 'messages.message as last_messages', 'forums.is_ended',
+                DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS last_messages_time"),
+                'messages.is_read as last_messages_is_read')
                 ->where('consultants.id', '=', $id)
                 ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM MESSAGES GROUP BY FORUM_ID)')
                 ->paginate(10);

@@ -65,7 +65,7 @@ class MessageController extends Controller
     }
 
     public function userSend(Request $request, $id) {
-        if(Gate::denies('update-data-user', $request->user_id)) {
+        if(Gate::denies('update-data-user', (int)$request->user_id)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
@@ -86,7 +86,7 @@ class MessageController extends Controller
     }
 
     public function consultantSend(Request $request, $id) {
-        if(Gate::denies('consultant-update', $request->consultant_id)) {
+        if(Gate::denies('consultant-update', (int)$request->consultant_id)) {
             return response()->json([
                 'code' => 403,
                 'message' => 'Forbidden'
@@ -117,7 +117,7 @@ class MessageController extends Controller
 
         return response()->json([
             'code' => 200,
-            'data' => new ConsultantForumResource($data)
+            'data' => MessageResource::collection($data->message)
         ]);
     }
 
@@ -131,7 +131,7 @@ class MessageController extends Controller
         }
         return response()->json([
             'code' => 200,
-            'data' => new UserForumResource($data)
+            'data' => MessageResource::collection($data->message)
         ]);
     }
 }

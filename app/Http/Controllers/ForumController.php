@@ -64,7 +64,8 @@ class ForumController extends Controller
         
         return response()->json([
             'code' => 200,
-            'message' => new UserForumResource($forum)
+            'data' => new UserForumResource($forum),
+            'message' => 'success'
         ], 200);
     }
 
@@ -98,17 +99,18 @@ class ForumController extends Controller
                 ->rightJoin('users', 'forums.user_id', '=', 'users.id')
                 ->rightJoin('consultants', 'forums.consultant_id', '=', 'consultants.id')
                 ->rightJoin('categories', 'consultants.category_id', '=', 'categories.id')
-                ->select('forums.id','consultants.id', 'users.id','forums.is_ended', 'categories.name as category',
+                ->select('forums.id','consultants.id as consultant_id', 'users.id as user_id','forums.is_ended', 'categories.name as category',
                 'consultants.name', 'consultants.photo', 'messages.message as last_message',
                 DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS 
-                last_messages_time"), 'messages.is_read as last_messages_is_read')
+                last_messages_time"), 'messages.is_read as last_messages_is_read', 'messages.sender as last_messages_from')
                 ->where('users.id', '=', $id)
                 ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM MESSAGES GROUP BY FORUM_ID)')
                 ->paginate(10);
 
         return response()->json([
             'code' => 200,
-            'message' => $data
+            'data' => $data,
+            'message' => 'success'
         ]);
     }
 

@@ -17,10 +17,11 @@ class UserForumResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'consultant_name' => $this->consultant->name,
-            'consultant_photo' => $this->consultant->photo,
-            'consultant_category' => $this->consultant->category->name,
+            'name' => $this->consultant->name,
+            'photo' => $this->consultant->photo,
+            'category' => $this->consultant->category->name,
             'user_id' => $this->user_id,
+            'consultant_id' => $this->consultant_id,
             'is_ended' => $this->is_ended,
             'time' => Carbon::parse($this->created_at)->format('d m Y'),
             'message' => MessageResource::collection($this->message)

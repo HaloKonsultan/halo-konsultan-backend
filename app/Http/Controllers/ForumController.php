@@ -110,8 +110,7 @@ class ForumController extends Controller
         return response()->json([
             'code' => 200,
             'data' => $data,
-            'message' => 'success'
-        ]);
+        ], 200);
     }
 
     public function getConsultantAllConversation($id) {
@@ -136,7 +135,7 @@ class ForumController extends Controller
 
         return response()->json([
             'code' => 200,
-            'message' => $data
-        ]);
+            'data' => $data
+        ], 200);
     }
 }

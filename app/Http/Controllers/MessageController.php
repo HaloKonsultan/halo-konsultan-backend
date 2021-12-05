@@ -118,7 +118,7 @@ class MessageController extends Controller
         return response()->json([
             'code' => 200,
             'data' => MessageResource::collection($data->message)
-        ]);
+        ], 200);
     }
 
     public function getUserAllMessage($id) {
@@ -132,6 +132,6 @@ class MessageController extends Controller
         return response()->json([
             'code' => 200,
             'data' => MessageResource::collection($data->message)
-        ]);
+        ],200);
     }
 }

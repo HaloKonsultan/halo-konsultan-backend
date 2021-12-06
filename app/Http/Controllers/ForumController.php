@@ -94,8 +94,7 @@ class ForumController extends Controller
             ],403);
         }
 
-        $data = DB::table('messages')
-                ->leftJoin('forums','messages.forum_id', '=','forums.id')
+        $data = Message::leftJoin('forums','messages.forum_id', '=','forums.id')
                 ->rightJoin('users', 'forums.user_id', '=', 'users.id')
                 ->rightJoin('consultants', 'forums.consultant_id', '=', 'consultants.id')
                 ->rightJoin('categories', 'consultants.category_id', '=', 'categories.id')
@@ -121,8 +120,7 @@ class ForumController extends Controller
             ],403);
         }
 
-        $data = DB::table('messages')
-                ->leftJoin('forums','messages.forum_id', '=','forums.id')
+        $data = Message::leftJoin('forums','messages.forum_id', '=','forums.id')
                 ->rightJoin('consultants', 'forums.consultant_id', '=', 'consultants.id')
                 ->rightJoin('users', 'forums.user_id', '=', 'users.id')
                 ->select('forums.id', 'users.name as user_name',

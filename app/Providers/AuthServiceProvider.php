@@ -48,6 +48,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('show-consultant-query', function (Consultant $consultant, $id) {
+            return $consultant->id === $id;
+        });
+
         Gate::define('update-data-consultant', function (Consultant $consultant, $id) {
             return $consultant->id === $id;
         });

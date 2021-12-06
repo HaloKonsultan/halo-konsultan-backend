@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Consultant;
-use App\ConsultantDocumentation;
 use App\ConsultantEducation;
 use App\ConsultantExperience;
 use App\ConsultantSkill;
 use App\ConsultantVirtualAccount;
-use App\ConsultationDocument;
 use App\Http\Resources\ConsultantResource;
 use Carbon\Carbon;
 use Exception;
@@ -295,9 +293,7 @@ class ConsultantController extends Controller
             'consultation_virtual_account.id' => ['integer'],
             'consultation_virtual_account.card_number' => ['numeric'],
             'consultation_virtual_account.bank' => ['string'],
-            'consultation_virtual_account.name' => ['string'],
-            'consultation_doc.id' => ['integer'],
-            'consultation_doc.photo' => ['string']
+            'consultation_virtual_account.name' => ['string']
         ]);
 
         
@@ -317,20 +313,6 @@ class ConsultantController extends Controller
                 $consultantVA->bank = $va["bank"];
                 $consultantVA->name = $va["name"];
                 $consultantVA->save();
-            }
-        }
-
-        foreach($request->consultation_doc as $doc) {
-            if($doc["id"] < 0) {
-                $consultantDoc = new ConsultantDocumentation();
-                $consultantDoc->consultant_id = $id;
-                $consultantDoc->photo = $doc["photo"];
-                $consultantDoc->save();
-            } else {
-                $consultantDoc = ConsultantDocumentation::find($doc["id"]);
-                $consultantDoc->consultant_id = $id;
-                $consultantDoc->photo = $doc["photo"];
-                $consultantDoc->save();
             }
         }
 

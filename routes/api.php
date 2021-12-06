@@ -76,6 +76,7 @@ Route::prefix('consultants',
         Route::post('upload/{id}', 'ConsultantController@uploadImage');
         Route::put('/consultation/{id}', 'ConsultantController@consultation');
         Route::delete('/virtual_account/{id}','ConsultantVirtualAccountController@destroy');
+        Route::post('/documentation/{id}', 'ConsultantDocumentationController@upload');
         Route::delete('/documentation/{id}', 'ConsultantDocumentationController@destroy');
         Route::delete('/education/{id}', 'ConsultantEducationController@destroy');
         Route::delete('/skill/{id}', 'ConsultantSkillController@destroy');

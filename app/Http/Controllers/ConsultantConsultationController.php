@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Consultant;
 use App\Consultation;
 use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
@@ -49,6 +50,12 @@ class ConsultantConsultationController extends Controller
     }
 
     public function getConsultationHistory($id) {
+        if(Gate::denies('show-consultant-query', (int)$id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
         $data = Consultation::join('consultants', 'consultations.consultant_id', 
                 '=', 'consultants.id')
                 ->join('users', 'consultations.user_id', '=', 'users.id')
@@ -59,13 +66,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
                 ->paginate(10);
-        if(Gate::denies('show-consultant-query', (int)$id)) {
-            return response()->json([
-                'code' => 403,
-                'message' => 'Forbidden'
-            ],403);
-        }
-        // $paginated = CollectionHelper::paginate($data,10);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -73,6 +73,12 @@ class ConsultantConsultationController extends Controller
     }
 
     public function getConsultationStatus($id, $status) {
+        if(Gate::denies('show-consultant-query', (int)$id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
         $data = DB::table('consultations')
                 ->join('consultants', 'consultations.consultant_id', '=',
                 'consultants.id')
@@ -81,13 +87,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', $status)
                 ->paginate(10);
-        if(Gate::denies('show-consultant-query', (int)$id)) {
-            return response()->json([
-                'code' => 403,
-                'message' => 'Forbidden'
-            ],403);
-        }
-        // $paginated = CollectionHelper::paginate($data,10);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -101,6 +100,7 @@ class ConsultantConsultationController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
+
         $data = DB::table('consultations')
                 ->join('consultants', 'consultations.consultant_id', '=',
                 'consultants.id')
@@ -113,10 +113,10 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.is_confirmed', '=', 1)
                 ->paginate(5);
-        // $paginated = CollectionHelper::paginate($data,5);
+
         return response()->json([
             'code' => 200,
-            'data' => new ConsultantConsultationResource($data)
+            'data' => $data
         ],200);
     }
 
@@ -127,6 +127,7 @@ class ConsultantConsultationController extends Controller
                 'message' => 'Forbidden'
             ],403);
         }
+
         $data = DB::table('consultations')
                 ->join('consultants', 'consultations.consultant_id', '=',
                 'consultants.id')
@@ -141,7 +142,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 1)
                 ->paginate(5);
-        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -168,7 +168,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.date', '=', $date)
                 ->paginate(5);
-        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -195,7 +194,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 0)
                 ->paginate(5);
-        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -221,7 +219,6 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.status', '=', 'done')
                 ->where('consultations.is_confirmed', '=', 1)
                 ->paginate();
-        // $paginated = CollectionHelper::paginate($data,5);
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -229,30 +226,28 @@ class ConsultantConsultationController extends Controller
     }
 
     public function getRejectedConsultation($id) {
-        try {
-            $data = DB::table('consultations')
-                    ->join('consultants', 'consultations.consultant_id', '=',
-                    'consultants.id')
-                    ->join('users', 'consultations.user_id', '=',
-                    'users.id')
-                    ->select('consultations.id', 'users.name', 
-                    'consultations.title', 'consultations.date', 
-                    'consultations.time')
-                    ->where('consultations.consultant_id', '=', $id)
-                    ->where('consultations.status', '=', 'done')
-                    ->where('consultations.is_confirmed', '=', 0)
-                    ->paginate(5);
-            // $paginated = CollectionHelper::paginate($data,5);
+        if(Gate::denies('show-consultant-query', (int)$id)) {
             return response()->json([
-                'code' => 200,
-                'data' => $data
-            ],200);
-        }catch(Exception $e) {
-            return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ],404);
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
         }
+        $data = DB::table('consultations')
+                ->join('consultants', 'consultations.consultant_id', '=',
+                'consultants.id')
+                ->join('users', 'consultations.user_id', '=',
+                'users.id')
+                ->select('consultations.id', 'users.name', 
+                'consultations.title', 'consultations.date', 
+                'consultations.time')
+                ->where('consultations.consultant_id', '=', $id)
+                ->where('consultations.status', '=', 'done')
+                ->where('consultations.is_confirmed', '=', 0)
+                ->paginate(5);
+        return response()->json([
+            'code' => 200,
+            'data' => $data
+        ],200);
     }
 
 }

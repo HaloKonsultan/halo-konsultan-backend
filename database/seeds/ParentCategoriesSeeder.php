@@ -26,6 +26,9 @@ class ParentCategoriesSeeder extends Seeder
             [
                 'name' => 'Konsultan Kesehatan'
             ],
+            [
+                'name' => 'Konsultan Hukum'
+            ],
         ];
 
         foreach($data as $key => $value) {

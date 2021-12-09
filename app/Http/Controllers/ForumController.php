@@ -103,7 +103,7 @@ class ForumController extends Controller
                 DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS 
                 last_messages_time"), 'messages.is_read as last_messages_is_read', 'messages.sender as last_messages_from')
                 ->where('users.id', '=', $id)
-                ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM MESSAGES GROUP BY FORUM_ID)')
+                ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM messages GROUP BY FORUM_ID)')
                 ->paginate(10);
 
         return response()->json([
@@ -128,7 +128,7 @@ class ForumController extends Controller
                 DB::raw("DATE_FORMAT(messages.created_at, '%H:%i') AS last_messages_time"),
                 'messages.is_read as last_messages_is_read')
                 ->where('consultants.id', '=', $id)
-                ->whereRaw('messages.id IN (SELECT MAX(`ID`) FROM MESSAGES GROUP BY FORUM_ID)')
+                ->whereRaw('messages.id IN (SELECT MAX(`ID`) from messages group by forum_id)')
                 ->paginate(10);
 
         return response()->json([

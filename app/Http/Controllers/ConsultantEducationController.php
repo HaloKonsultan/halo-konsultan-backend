@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ConsultantEducation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ConsultantEducationController extends Controller
 {
@@ -16,7 +15,6 @@ class ConsultantEducationController extends Controller
     
     public function destroy(Request $request, $id) {
         $data = ConsultantEducation::findOrFail($id);
-        // dd($data);
         if($request->user()->cannot('delete', $data)) {
             return response()->json([
                 'code' => 403,

@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Consultant;
-use App\Consultation;
-use App\ConsultationDocument;
-use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantResource;
-use App\Http\Resources\ConsultationResource;
-use App\Http\Resources\UserConsultationResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\User;
 use Exception; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -139,7 +134,6 @@ class UserController extends Controller
                     'consultants.city', 'consultants.photo')
                     ->where('consultants.name', 'LIKE', '%'.$name.'%')
                     ->paginate(5);
-            // $paginated = CollectionHelper::paginate($data,2);
             return response()->json([
                 'code' => 200,
                 'data' => $data
@@ -209,5 +203,14 @@ class UserController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'data' => $data
         ],200);
+    }
+
+    public function refresh() {
+        $token = JWTAuth::getToken();
+        $newToken = JWTAuth::refresh($token, true);
+        return response()->json([
+            'code' => 200,
+            'access_token' => $newToken 
+        ], 200);
     }
 }

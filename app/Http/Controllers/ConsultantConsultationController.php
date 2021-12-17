@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Consultant;
 use App\Consultation;
-use App\Helpers\CollectionHelper;
 use App\Http\Resources\ConsultantConsultationResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

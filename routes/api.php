@@ -20,6 +20,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
     Route::post('/logout', 'UserController@logout');
     Route::get('/profile/{id}', 'UserController@profile');
     Route::patch('/update/{id}', 'UserController@update');
+    Route::post('/refresh', 'UserController@refresh');
 
     Route::prefix('consultants')->group(function () {
         Route::get('/{id}', 'UserController@consultant');
@@ -35,8 +36,6 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::patch('/{id}', 'ConsultationPreferenceDateController@sendDate');
         Route::post('/{id}/upload-document/{id_document}',
         'ConsultationDocumentController@uploadDoc');
-        // Route::post('/{id}/change-document/{id_document}',
-        // 'ConsultationDocumentController@updateDoc');
         Route::get('/user/{id}/status/{status}',
         'UserConsultationController@userConsultationStatus');
     });
@@ -69,6 +68,7 @@ Route::prefix('consultants',
     Route::post('/register', 'ConsultantController@register');
     Route::post('/login', 'ConsultantController@login');
     Route::post('/logout', 'ConsultantController@logout');
+    Route::post('/refresh', 'ConsultantController@refresh');
 
     Route::prefix('profile')->group(function(){
         Route::get('/{id}', 'ConsultantController@profile');

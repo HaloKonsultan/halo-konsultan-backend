@@ -98,35 +98,6 @@ class ConsultationController extends Controller
         }
     }
 
-    // public function declineConsultation(Request $request, $id) {
-    //     try {
-    //         $request->validate([
-    //             'confirmed' => ['integer']
-    //         ]);
-
-    //         if($request->confirmed == 0) {
-    //             $data = Consultation::findOrFail($id);
-    //             $data->is_confirmed = $request->confirmed;
-    //             $data->status = 'done';
-    //             $data->save();
-    //             return response()->json([
-    //                 'code' => 200,
-    //                 'message' => 'Data Updated'
-    //             ], 200);
-    //         } else {
-    //             return response()->json([
-    //                 'code' => 400,
-    //                 'message' => 'Bad Request'
-    //             ], 400);
-    //         }
-    //     }catch(Exception $e) {
-    //         return response()->json([
-    //             'code' => 404,
-    //             'message' => $e
-    //         ], 404);
-    //     }
-    // }
-
     public function updateConsultation(Request $request, $id) {
         $consulData = Consultation::findOrFail($id);
 

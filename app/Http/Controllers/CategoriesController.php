@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Categories;
-use App\Helpers\CollectionHelper;
 use App\Http\Resources\ParentCategoriesResource;
 use App\ParentCategories;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
@@ -85,7 +83,6 @@ class CategoriesController extends Controller
                 'consultants.city', 'consultants.photo')
                 ->where('consultants.city', 'LIKE', '%' . $city . '%')
                 ->paginate(10);
-            // $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,
                 'data' => $data
@@ -109,8 +106,6 @@ class CategoriesController extends Controller
                         'consultants.city', 'consultants.photo')
                         ->where('consultants.category_id', '=', $id)
                         ->paginate(5);
-                        
-            // $paginated = CollectionHelper::paginate($data, 10);
             return response()->json([
                 'code' => 200,
                 'data' => $data

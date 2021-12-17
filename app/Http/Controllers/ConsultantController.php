@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ConsultantController extends Controller
 {
@@ -356,5 +357,14 @@ class ConsultantController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'data' => $data
         ]);
+    }
+
+    public function refresh() {
+        $token = JWTAuth::getToken();
+        $newToken = JWTAuth::refresh($token, true);
+        return response()->json([
+            'code' => 200,
+            'access_token' => $newToken 
+        ], 200);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ConsultantExperience;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ConsultantExperienceController extends Controller
 {

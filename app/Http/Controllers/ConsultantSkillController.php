@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ConsultantSkill;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ConsultantSkillController extends Controller
 {

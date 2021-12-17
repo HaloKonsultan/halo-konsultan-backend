@@ -5,13 +5,9 @@ namespace App\Http\Controllers;
 use App\Consultation;
 use App\Consultant;
 use Exception;
-use App\Helpers\CollectionHelper;
 use App\Http\Resources\UserConsultationResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-
-use function PHPUnit\Framework\returnSelf;
 
 class UserConsultationController extends Controller
 {

@@ -122,6 +122,7 @@ class UserConsultationController extends Controller
             $query->where('consultations.status', '=', 'active')
                 ->where('consultations.status', '=', 'waiting');
         })
+        ->orderBy('consultations.created_at', 'desc')
         ->take(3)
         ->get();
 

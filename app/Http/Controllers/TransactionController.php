@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Xendit\Xendit;
 use Illuminate\Support\Str;
+use stdClass;
 
 class TransactionController extends Controller
 {
@@ -78,9 +79,15 @@ class TransactionController extends Controller
         } else {
             $data = Consultation::findOrFail($id);
             $external_id = 'HK#'.$data->id.'#'.$data->consultant_id.'#'.$data->user_id.'#'.Str::random(15);
+            $items = new stdClass;
+            $items->name = "Consultation";
+            $items->quantity = 1;
+            $items->price = $data->consultation_price;
+
             $params = [
                 'external_id' => $external_id,
                 'amount' => $request->amount,
+                "items" => [$items]
             ];
     
             $createInvoice = \Xendit\Invoice::create($params);

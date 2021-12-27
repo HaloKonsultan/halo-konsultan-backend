@@ -155,4 +155,24 @@ class UserConsultationController extends Controller
             ], 404);
         }
     }
+
+    public function review($id) {
+        $data = Consultation::findOrFail($id);
+        if(Gate::denies('user-consultation', $data)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
+        if($data->review == 0) {
+            $data->review = 1;
+            $data->save();
+        }
+
+        return response()->json([
+            'code' => 200,
+            'data' => new UserConsultationResource($data)
+        ],200);
+    }
 }

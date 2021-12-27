@@ -25,6 +25,7 @@ class UserConsultationResource extends JsonResource
             'is_confirmed' => $this->is_confirmed,
             'date' => $this->date,
             'time' => $this->time,
+            'review' => $this->review,
             'conference_link' => $this->conference_link,
             'preference' => $this->preference,
             'message' => $this->message,

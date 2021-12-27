@@ -28,6 +28,7 @@ class CreateConsultationsTable extends Migration
             $table->string('time')->nullable();
             $table->string('conference_link')->nullable();
             $table->string('message',100)->nullable();
+            $table->integer('review')->nullable();
             $table->timestamps();
         });
     }

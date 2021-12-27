@@ -33,7 +33,9 @@ class ConsultantConsultationResource extends JsonResource
             'message' => $this->message,
             'transaction' => new TransactionResource($this->transaction),
             'consultation_document' => ConsultationDocumentResource::collection($this->document),
-            'consultation_preference_date' => ConsultationPreferenceDateResource::collection($this->preferenceDate)
+            'consultation_preference_date' => ConsultationPreferenceDateResource::collection($this->preferenceDate),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

@@ -264,7 +264,7 @@ class ConsultantController extends Controller
         }
 
         $request->validate([
-            'photo' => ['image','mimes:jpg,png,jpeg', 'max:1024'],
+            'photo' => ['image','mimes:jpg,png,jpeg', 'max:4096'],
         ]);
 
         $data = Consultant::findOrFail($id);

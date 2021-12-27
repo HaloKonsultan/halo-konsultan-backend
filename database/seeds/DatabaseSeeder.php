@@ -15,6 +15,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ParentCategoriesSeeder::class,
             CategoriesSeeder::class,
+            ConsultantSeeder::class,
+            UserSeeder::class,
+            ConsultationsSeeder::class,
+            ConsultantDocumentationSeeder::class,
+            ConsultantEducationSeeder::class,
+            ConsultantExperienceSeeder::class,
+            ConsultantSkillSeeder::class,
+            ConsultantVirtualAccountSeeder::class,
+            ConsultationDocumentSeeder::class,
+            ConsultationPreferenceDateSeeder::class,
+            TransactionSeeder::class
         ]);
 
     }

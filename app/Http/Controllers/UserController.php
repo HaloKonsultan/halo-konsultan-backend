@@ -133,6 +133,7 @@ class UserController extends Controller
                     'categories.name AS position', 'consultants.likes_total',
                     'consultants.city', 'consultants.photo')
                     ->where('consultants.name', 'LIKE', '%'.$name.'%')
+                    ->orWhere('categories.name', 'LIKE', '%'.$name.'%')
                     ->paginate(5);
             return response()->json([
                 'code' => 200,

@@ -38,6 +38,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         'ConsultationDocumentController@uploadDoc');
         Route::get('/user/{id}/status/{status}',
         'UserConsultationController@userConsultationStatus');
+        Route::get('/user/{id}/latest', 'UserConsultationController@getLatestConsultations');
     });
 
     Route::prefix('categories')->group(function () {

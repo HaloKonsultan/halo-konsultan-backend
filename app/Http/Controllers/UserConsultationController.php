@@ -17,7 +17,8 @@ class UserConsultationController extends Controller
         $this->middleware('auth:api', ['only' => [
             'userConsultation',
             'booking',
-            'userConsultationStatus'
+            'userConsultationStatus',
+            'getLatestConsultations'
         ]]);
     }
 
@@ -98,6 +99,35 @@ class UserConsultationController extends Controller
         return response()->json([
             'code' => 200,
             'data' => $data
+        ],200);
+    }
+
+    public function getLatestConsultations($id) {
+        if(Gate::denies('show-user', (int)$id)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
+        $data = Consultation::join('consultants', 'consultations.consultant_id',
+        '=', 'consultants.id')
+        ->select('consultations.id', 'consultations.user_id AS user_id',
+        'consultations.consultant_id', 'consultants.name',
+        'consultations.title', 'consultations.status',
+        'consultations.is_confirmed', 'consultations.date',
+        'consultations.time')
+        ->where('consultations.user_id', '=', $id)
+        ->orWhere(function($query) {
+            $query->where('consultations.status', '=', 'active')
+                ->where('consultations.status', '=', 'waiting');
+        })
+        ->take(3)
+        ->get();
+
+        return response()->json([
+        'code' => 200,
+        'data' => $data
         ],200);
     }
 

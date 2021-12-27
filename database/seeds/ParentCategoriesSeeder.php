@@ -15,9 +15,6 @@ class ParentCategoriesSeeder extends Seeder
         //
         $data = [
             [
-                'name' => 'Konsultan Agama'
-            ],
-            [
                 'name' => 'Konsultan Keuangan'
             ],
             [

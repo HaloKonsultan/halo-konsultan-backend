@@ -57,13 +57,17 @@ class ConsultantConsultationController extends Controller
         $data = Consultation::join('consultants', 'consultations.consultant_id', 
                 '=', 'consultants.id')
                 ->join('users', 'consultations.user_id', '=', 'users.id')
+                ->join('transactions', 'consultations.id', '=', 'transactions.consultation_id')
                 ->select('consultations.id','consultants.id AS consultant_id',
                 'consultations.title', 'users.name', 'consultations.date', 
                 'consultations.time','consultations.status', 
-                'consultations.is_confirmed')
+                'consultations.is_confirmed', 'transactions.amount AS income',
+                DB::raw("DATE_FORMAT(consultations.created_at, '%d-%m-%Y') AS consultations_created"),
+                DB::raw("DATE_FORMAT(consultations.updated_at, '%d-%m-%Y') AS consultations_date"),
+                DB::raw("DATE_FORMAT(transactions.updated_at, '%d-%m-%Y') AS transactions_date"),)
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
-                ->paginate(10);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -84,7 +88,7 @@ class ConsultantConsultationController extends Controller
                 'consultations.date', 'consultations.status')
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', $status)
-                ->paginate(10);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -110,7 +114,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->paginate(5);
+                ->get();
 
         return response()->json([
             'code' => 200,
@@ -139,7 +143,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->paginate(5);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -165,7 +169,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultants.id', '=', $id)
                 ->where('consultations.status', '=', 'active')
                 ->where('consultations.date', '=', $date)
-                ->paginate(5);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -191,7 +195,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'waiting')
                 ->where('consultations.is_confirmed', '=', 0)
-                ->paginate(5);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -216,7 +220,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
                 ->where('consultations.is_confirmed', '=', 1)
-                ->paginate();
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data
@@ -241,7 +245,7 @@ class ConsultantConsultationController extends Controller
                 ->where('consultations.consultant_id', '=', $id)
                 ->where('consultations.status', '=', 'done')
                 ->where('consultations.is_confirmed', '=', 0)
-                ->paginate(5);
+                ->get();
         return response()->json([
             'code' => 200,
             'data' => $data

@@ -69,28 +69,35 @@ class TransactionController extends Controller
         $request->validate([
             'amount' => ['required', 'numeric'],
         ]);
-
-        $data = Consultation::findOrFail($id);
-        $external_id = 'HK#'.$data->id.'#'.$data->consultant_id.'#'.$data->user_id.'#'.Str::random(15);
-        $params = [
-            'external_id' => $external_id,
-            'amount' => $request->amount,
-        ];
-
-        $createInvoice = \Xendit\Invoice::create($params);
-        $newTransaction = new Transaction();
-        $newTransaction->external_id = $external_id;
-        $newTransaction->amount = $request->amount;
-        $newTransaction->status_invoice = $createInvoice["status"];
-        $newTransaction->invoice_url = $createInvoice["invoice_url"];
-        $newTransaction->expiry_date = $createInvoice["expiry_date"];
-        $newTransaction->consultation_id = $id;
-        $newTransaction->save();
-        return response()->json([
-            'code' => 201,
-            'data' => $newTransaction,
-            'message' => 'created'
-        ],200);
+        $transaction = Transaction::where('consultation_id', $id)->first();
+        if($transaction) {
+            return response()->json([
+                'code' => 200,
+                'data' => new TransactionResource($transaction)
+            ],200);
+        } else {
+            $data = Consultation::findOrFail($id);
+            $external_id = 'HK#'.$data->id.'#'.$data->consultant_id.'#'.$data->user_id.'#'.Str::random(15);
+            $params = [
+                'external_id' => $external_id,
+                'amount' => $request->amount,
+            ];
+    
+            $createInvoice = \Xendit\Invoice::create($params);
+            $newTransaction = new Transaction();
+            $newTransaction->external_id = $external_id;
+            $newTransaction->amount = $request->amount;
+            $newTransaction->status_invoice = $createInvoice["status"];
+            $newTransaction->invoice_url = $createInvoice["invoice_url"];
+            $newTransaction->expiry_date = $createInvoice["expiry_date"];
+            $newTransaction->consultation_id = $id;
+            $newTransaction->save();
+            return response()->json([
+                'code' => 201,
+                'data' => $newTransaction,
+                'message' => 'created'
+            ],200);
+        }
     }
 
     public function invoiceCallback(Request $request) {

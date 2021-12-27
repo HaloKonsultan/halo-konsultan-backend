@@ -26,7 +26,7 @@ class ConsultationDocumentController extends Controller
 
     public function uploadDoc(Request $request, $id, $docId) {
         $request->validate([
-            'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:2048']
+            'file' => ['mimes:jpg,png,jpeg,pdf,docx', 'max:102400']
         ]);
         $data = ConsultationDocument::findOrFail($docId);
         $response = Consultation::findOrFail($id);

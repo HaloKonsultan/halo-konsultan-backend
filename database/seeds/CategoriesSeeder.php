@@ -15,36 +15,6 @@ class CategoriesSeeder extends Seeder
         //
         $data = [
             [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782696/Budha_ewsyno.png',
-                'name' => 'Konsultan Agama Budha'
-            ],
-            [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782697/Konghucu_g4csda.png',
-                'name' => 'Konsultan Agama Konghuchu'
-            ],
-            [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782697/Kristen_o6ljor.png',
-                'name' => 'Konsultan Agama Kristen'
-            ],
-            [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782697/Islam_lmlxjh.png',
-                'name' => 'Konsultan Agama Islam'
-            ],
-            [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782696/Hindu_g3bxyt.png',
-                'name' => 'Konsultan Agama Hindu'
-            ],
-            [
-                'parent_id' => 1,
-                'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782697/Katolik_lynis6.png',
-                'name' => 'Konsultan Agama Katolik'
-            ],
-            [
                 'parent_id' => 2,
                 'logo' => 'https://res.cloudinary.com/dkao45dpc/image/upload/v1638782697/Akuntansi_-_2_iaodua.png',
                 'name' => 'Konsultan Akuntansi'

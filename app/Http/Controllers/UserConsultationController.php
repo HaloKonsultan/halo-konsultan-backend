@@ -123,7 +123,7 @@ class UserConsultationController extends Controller
                 ->orWhere('consultations.status','=', 'waiting');
         })
         ->orderBy('consultations.updated_at', 'desc')
-        ->take(10)
+        ->take(3)
         ->get();
 
         return response()->json([

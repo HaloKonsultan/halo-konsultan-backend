@@ -118,12 +118,12 @@ class UserConsultationController extends Controller
         'consultations.is_confirmed', 'consultations.date',
         'consultations.time')
         ->where('consultations.user_id', '=', $id)
-        ->orWhere(function($query) {
-            $query->where('consultations.status', '=', 'active')
-                ->where('consultations.status', '=', 'waiting');
+        ->where(function($query) {
+            $query->where('consultations.status','=', 'active')
+                ->orWhere('consultations.status','=', 'waiting');
         })
         ->orderBy('consultations.updated_at', 'desc')
-        ->take(3)
+        ->take(10)
         ->get();
 
         return response()->json([

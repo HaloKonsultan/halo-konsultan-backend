@@ -156,7 +156,7 @@ class UserConsultationController extends Controller
         }
     }
 
-    public function review($id) {
+    public function updateReview($id) {
         $data = Consultation::findOrFail($id);
         if(Gate::denies('user-consultation', $data)) {
             return response()->json([

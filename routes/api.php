@@ -33,6 +33,7 @@ Route::prefix('users', ['middleware' => 'api'])->group(function () {
         Route::post('', 'UserConsultationController@booking');
         Route::get('/{id}', 'UserConsultationController@userConsultation');
         Route::post('/review/{id}', 'UserConsultationController@reviewConsultation');
+        Route::patch('/review/{id}', 'UserConsultationController@updateReview');
         Route::patch('/{id}', 'ConsultationPreferenceDateController@sendDate');
         Route::post('/{id}/upload-document/{id_document}',
         'ConsultationDocumentController@uploadDoc');

@@ -137,22 +137,31 @@ class UserConsultationController extends Controller
             'is_like' => 'integer'
         ]);
 
-        try {
-            $consultation = Consultation::findOrFail($id);
-            $data = Consultant::findOrFail($consultation->consultant_id);
+        $consultation = Consultation::findOrFail($id);
+        $data = Consultant::findOrFail($consultation->consultant_id);
+        if(Gate::denies('user-consultation', $consultation)) {
+            return response()->json([
+                'code' => 403,
+                'message' => 'Forbidden'
+            ],403);
+        }
+
+        if($consultation->review == 0) {
             if ($request->is_like == '1') {
                 $data->likes_total++;
             }
+            $consultation->review = 1;
+            $consultation->save();
             $data->save();
             return response()->json([
                 'code' => 200,
                 'data' => $data
             ],200);
-        } catch(Exception $e) {
+        } else {
             return response()->json([
-                'code' => 404,
-                'message' => 'Not Found'
-            ], 404);
+                'code' => 200,
+                'data' => $data
+            ],200);
         }
     }
 
@@ -165,10 +174,7 @@ class UserConsultationController extends Controller
             ],403);
         }
 
-        if($data->review == 0) {
-            $data->review = 1;
-            $data->save();
-        }
+       
 
         return response()->json([
             'code' => 200,

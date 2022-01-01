@@ -19,7 +19,7 @@ class CreateConsultantsTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onUpdate('cascade');
-            $table->string('description')->nullable();
+            $table->string('description', 300)->nullable();
             $table->string('gender')->nullable();
             $table->string('province')->nullable();
             $table->string('city')->nullable();

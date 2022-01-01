@@ -17,7 +17,7 @@ class CreateConsultationsTable extends Migration
             $table->id();
             $table->foreignId('consultant_id')->nullable()->constrained('consultants')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('description',300)->nullable();
+            $table->string('description',1000)->nullable();
             $table->string('title')->nullable();
             $table->bigInteger('consultation_price')->nullable();
             $table->string('location')->nullable();
@@ -27,7 +27,7 @@ class CreateConsultationsTable extends Migration
             $table->string('date')->nullable();
             $table->string('time')->nullable();
             $table->string('conference_link')->nullable();
-            $table->string('message',300)->nullable();
+            $table->string('message',1000)->nullable();
             $table->integer('review')->default(0);
             $table->timestamps();
         });
